@@ -10,8 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$wes_lang = function_exists( 'pll_current_language' ) ? pll_current_language() : 'en';
-$wes_quiz = function_exists( 'wes_quiz_data' ) ? wes_quiz_data( $wes_lang ) : null;
+$wes_lang     = function_exists( 'pll_current_language' ) ? pll_current_language() : 'en';
+$wes_quiz_id  = function_exists( 'get_field' ) ? absint( get_field( 'quiz_post' ) ) : 0;
+$wes_quiz     = function_exists( 'wes_quiz_data' ) ? wes_quiz_data( $wes_lang, $wes_quiz_id ) : null;
 
 if ( empty( $wes_quiz ) ) {
 	echo '<div class="block-empty container">Quiz content unavailable.</div>';
