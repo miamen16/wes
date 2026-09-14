@@ -1,0 +1,950 @@
+{
+  "en": {
+    "intro": {
+      "eyebrow": "5 questions · 3 minutes",
+      "title": "Is your climate already changing?",
+      "lead": "This isn’t a test — there are no right or wrong answers. Find out where you are and discover resources tailored to you.",
+      "note": "",
+      "start": "Start the quiz"
+    },
+    "ui": {
+      "progress": "Question {n} of {total}",
+      "multi": "Select all that apply",
+      "single": "Choose one",
+      "next": "Next",
+      "back": "Back",
+      "results": "See my results",
+      "retake": "Retake the quiz"
+    },
+    "questions": [
+      {
+        "multi": true,
+        "text": "Thinking about the past few years, what feels different where you live?",
+        "options": [
+          {
+            "text": "Summers feel hotter or last longer",
+            "feedback": "You’re clearly feeling the heat — longer, hotter summers are hard to ignore."
+          },
+          {
+            "text": "Weather feels more unpredictable, with sudden rain, heat, or cold",
+            "feedback": "That sense of unpredictability is something many people are starting to notice in the Mediterranean."
+          },
+          {
+            "text": "Water feels less reliable, with shortages, lower pressure, or quality concerns",
+            "feedback": "Changes in water are often one of the first things people pick up on, especially in our region."
+          },
+          {
+            "text": "I haven’t really noticed any changes",
+            "feedback": "That’s completely valid — changes don’t feel the same everywhere."
+          },
+          {
+            "text": "I’m not sure",
+            "feedback": "That uncertainty is normal — sometimes it’s hard to tell what’s changing and what’s not."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "Which of these affects your day-to-day life the most right now?",
+        "options": [
+          {
+            "text": "Heat makes it harder to sleep, move around, or focus",
+            "feedback": "That kind of heat can really shape how your day unfolds."
+          },
+          {
+            "text": "Water use requires more attention, such as saving, storing, or planning",
+            "feedback": "It sounds like water is something you’re already thinking about more closely."
+          },
+          {
+            "text": "Food or living costs feel less stable than before",
+            "feedback": "Many people are starting to feel these shifts in everyday expenses."
+          },
+          {
+            "text": "Waste and pollution feel more visible around me",
+            "feedback": "When it becomes visible, it’s hard to ignore."
+          },
+          {
+            "text": "None of these, really",
+            "feedback": "That’s good to hear — not everyone is affected in the same way."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "Have you already changed anything in your daily habits because of this?",
+        "options": [
+          {
+            "text": "Yes, I’ve started adjusting how I use water or energy",
+            "feedback": "You’ve already started making practical adjustments — that’s a strong step."
+          },
+          {
+            "text": "Yes, I try to reduce waste or plastic when I can",
+            "feedback": "That’s a very concrete change, and it adds up over time."
+          },
+          {
+            "text": "A little, but not consistently",
+            "feedback": "That’s often how it starts — small steps here and there."
+          },
+          {
+            "text": "Not really",
+            "feedback": "That’s okay — noticing change and acting on it don’t always happen at the same time."
+          },
+          {
+            "text": "I hadn’t thought about it this way before",
+            "feedback": "That makes sense — sometimes the connection isn’t obvious at first."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "When you notice these changes, what is your first reaction?",
+        "options": [
+          {
+            "text": "I want to understand what’s going on",
+            "feedback": "Wanting to understand is often the first instinct."
+          },
+          {
+            "text": "I feel concerned but unsure what to do",
+            "feedback": "That’s a very common feeling — concern without clear direction."
+          },
+          {
+            "text": "I try to take small actions where I can",
+            "feedback": "You’re already responding in practical ways, even if they’re small."
+          },
+          {
+            "text": "I talk to others or encourage them to act",
+            "feedback": "That’s a step further — you’re already thinking beyond yourself."
+          },
+          {
+            "text": "I don’t feel personally concerned",
+            "feedback": "That’s your perspective — not everyone experiences this the same way."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "What would be most helpful to you right now?",
+        "options": [
+          {
+            "text": "Clear explanations of what’s happening and why",
+            "feedback": "That makes sense — having a clear picture helps everything else fall into place."
+          },
+          {
+            "text": "Simple, practical things I can do at home",
+            "feedback": "You’re looking for things you can actually apply — that’s a great place to be."
+          },
+          {
+            "text": "Quick tips I can apply immediately",
+            "feedback": "Keeping it simple and doable is often what works best."
+          },
+          {
+            "text": "Ways to raise awareness or involve others",
+            "feedback": "You’re ready to go beyond your own actions — that’s how change spreads."
+          },
+          {
+            "text": "I’m just exploring for now",
+            "feedback": "That’s a good place to start — just seeing what’s out there."
+          }
+        ]
+      }
+    ],
+    "profiles": [
+      {
+        "key": "A",
+        "title": "Start by understanding",
+        "lead": "You’re starting to notice changes — and you want to make sense of them.",
+        "body": "Based on your answers, you’ve seen signs of change around you, even if they don’t always feel clear or connected yet. That’s a natural place to be. Taking a bit of time to understand what’s happening — and why — can help you see the bigger picture and what it means for your daily life. Here are a few places to start, based on what you’ve been noticing.",
+        "groups": [
+          {
+            "heading": "Start here",
+            "items": [
+              {
+                "cat": "Explainer",
+                "title": "What is Climate Change – and What Does it Mean for the Mediterranean?",
+                "link": "/explainers/what-is-climate-change/"
+              },
+              {
+                "cat": "Explainer",
+                "title": "Water, Food, Climate, and Nature: What’s Changing in the Mediterranean",
+                "link": "/explainers/water-food-climate-nature/"
+              },
+              {
+                "cat": "Explainer",
+                "title": "Living with heat: how Mediterranean communities adapt to heatwaves",
+                "link": "/explainers/living-with-heat/"
+              }
+            ]
+          },
+          {
+            "heading": "If you want to go a bit further",
+            "items": [
+              {
+                "cat": "Checklist",
+                "title": "5 simple ways to cope with a heatwave",
+                "link": "/checklists/heatwave-today/"
+              },
+              {
+                "cat": "Checklist",
+                "title": "5 simple ways to save water at home",
+                "link": "/checklists/save-water-at-home/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "B",
+        "title": "Ready to take action",
+        "lead": "You’re already thinking about what you can do.",
+        "body": "From your answers, it’s clear you’re noticing changes and already adjusting some habits, or thinking about how to. That’s how change begins — step by step, in everyday routines. Here are some simple things you can build on, starting from what you’re already doing.",
+        "groups": [
+          {
+            "heading": "Start with something you can do right away",
+            "items": [
+              {
+                "cat": "Checklist",
+                "title": "5 simple ways to save water at home",
+                "link": "/checklists/save-water-at-home/"
+              },
+              {
+                "cat": "Checklist",
+                "title": "5 simple ways to avoid plastics on the go",
+                "link": "/checklists/avoid-single-use-plastics/"
+              },
+              {
+                "cat": "Checklist",
+                "title": "5 simple ways to waste less food",
+                "link": "/checklists/waste-less-food/"
+              }
+            ]
+          },
+          {
+            "heading": "Build on that",
+            "items": [
+              {
+                "cat": "How-to guide",
+                "title": "How to reduce your single-use plastics",
+                "link": "/how-to-guides/reduce-single-use-plastics/"
+              },
+              {
+                "cat": "How-to guide",
+                "title": "How to reduce food waste at home",
+                "link": "/how-to-guides/reduce-food-waste-at-home/"
+              },
+              {
+                "cat": "How-to guide",
+                "title": "How to transform your balcony or rooftop into a mini-food garden",
+                "link": "/how-to-guides/rooftop-balcony-food-garden/"
+              }
+            ]
+          },
+          {
+            "heading": "See how it connects",
+            "items": [
+              {
+                "cat": "Explainer",
+                "title": "Plastic Isn’t Just Pollution — It’s a Climate Problem",
+                "link": "/explainers/plastic-and-climate/"
+              },
+              {
+                "cat": "Explainer",
+                "title": "Living with heat: how Mediterranean communities adapt to heatwaves",
+                "link": "/explainers/living-with-heat/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "C",
+        "title": "Ready to engage others",
+        "lead": "You’re not just noticing change — you’re ready to take it further.",
+        "body": "Your answers show that you’re already acting or thinking beyond your own habits. You’re in a position to share what you know, start conversations, or encourage others in ways that feel natural to you. Here are some ways you can build on that and reach others around you.",
+        "groups": [
+          {
+            "heading": "Start here",
+            "items": [
+              {
+                "cat": "Communication Toolkit",
+                "title": "How to communicate climate effectively",
+                "link": "/communicating-climate-effectively/"
+              },
+              {
+                "cat": "Youth Leader Toolkit",
+                "title": "Teach & Facilitate",
+                "link": "/teach-youth-leaders/"
+              }
+            ]
+          },
+          {
+            "heading": "Strengthen your message",
+            "items": [
+              {
+                "cat": "Explainer",
+                "title": "What is Climate Change – and What Does it Mean for the Mediterranean?",
+                "link": "/explainers/what-is-climate-change/"
+              },
+              {
+                "cat": "Explainer",
+                "title": "Water, Food, Climate, and Nature: What’s Changing in the Mediterranean",
+                "link": "/explainers/water-food-climate-nature/"
+              },
+              {
+                "cat": "Explainer",
+                "title": "Plastic Isn’t Just Pollution — It’s a Climate Problem",
+                "link": "/explainers/plastic-and-climate/"
+              }
+            ]
+          },
+          {
+            "heading": "Use practical examples",
+            "items": [
+              {
+                "cat": "How-to guide",
+                "title": "How to reduce your single-use plastics",
+                "link": "/how-to-guides/reduce-single-use-plastics/"
+              },
+              {
+                "cat": "How-to guide",
+                "title": "How to reduce food waste at home",
+                "link": "/how-to-guides/reduce-food-waste-at-home/"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "ar": {
+    "intro": {
+      "eyebrow": "5 أسئلة · 3 دقائق",
+      "title": "هل بدأ مناخك بالتغيّر فعلاً؟",
+      "lead": "هذا ليس اختبارًا — لا توجد إجابات صحيحة أو خاطئة. اكتشف أين أنت واحصل على موارد مصمّمة خصيصًا لك.",
+      "note": "",
+      "start": "ابدأ الاختبار"
+    },
+    "ui": {
+      "progress": "السؤال {n} من {total}",
+      "multi": "اختر كل ما ينطبق",
+      "single": "اختر خيارًا واحدًا",
+      "next": "التالي",
+      "back": "السابق",
+      "results": "عرض نتائجي",
+      "retake": "أعد الاختبار"
+    },
+    "questions": [
+      {
+        "multi": true,
+        "text": "إذا فكرت في السنوات القليلة الماضية، ما الذي يبدو مختلفًا في المكان الذي تعيش فيه؟",
+        "options": [
+          {
+            "text": "يبدو الصيف أكثر حرارة أو أطول مدة",
+            "feedback": "من الواضح أنك تشعر بالحرارة — فمن الصعب تجاهل الصيف الأطول والأكثر حرارة."
+          },
+          {
+            "text": "يبدو الطقس أكثر تقلبًا، مع هطول أمطار مفاجئة أو ارتفاع درجات الحرارة أو انخفاضها",
+            "feedback": "بدأ الكثير من الناس في منطقة البحر الأبيض المتوسط يلاحظون عدم القدرة على التنبؤ بالطقس."
+          },
+          {
+            "text": "يبدو إمداد المياه أكثر تقلّبًا، مع حدوث نقص أو انخفاض في الضغط أو مشاكل في الجودة",
+            "feedback": "التغيرات في المياه غالبًا ما تكون من أول الأمور التي يلاحظها الناس، خاصة في منطقتنا."
+          },
+          {
+            "text": "لم ألاحظ أي تغييرات تذكر",
+            "feedback": "هذا أمر طبيعي جدًا — فالتغييرات تختلف من مكان لآخر."
+          },
+          {
+            "text": "لست متأكدًا",
+            "feedback": "الشك أمر طبيعي — ففي بعض الأحيان يصعب التمييز بين ما يتغير وما لا يتغير."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "أي من الخيارات التالية يؤثر بشكل أكبر على حياتك اليومية في الوقت الحالي؟",
+        "options": [
+          {
+            "text": "الحرارة تجعل النوم أو التنقل أو التركيز أكثر صعوبة",
+            "feedback": "يمكن لمثل هذه الحرارة أن تؤثر بشكل كبير على سير يومك."
+          },
+          {
+            "text": "استخدام المياه يتطلب مزيدًا من الاهتمام، مثل التوفير أو التخزين أو التخطيط",
+            "feedback": "يبدو أنك بدأت بالفعل في التفكير بجدية أكبر في مسألة المياه."
+          },
+          {
+            "text": "تبدو تكاليف الغذاء أو المعيشة أقل ثباتًا من ذي قبل",
+            "feedback": "بدأ الكثير من الناس يشعرون بهذه التغيرات في نفقاتهم اليومية."
+          },
+          {
+            "text": "تبدو النفايات والتلوث أكثر وضوحًا من حولي",
+            "feedback": "عندما تصبح هذه التغيرات واضحة للعيان، يصعب تجاهلها."
+          },
+          {
+            "text": "لا شيء من هذه الخيارات، في الحقيقة",
+            "feedback": "هذا خبر سار — فليس الجميع يتأثرون بنفس الطريقة."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "هل قمت بإجراء أي تغييرات في عاداتك اليومية بسبب هذا الأمر؟",
+        "options": [
+          {
+            "text": "نعم، لقد بدأت في تعديل طريقة استخدامي للمياه أو الطاقة",
+            "feedback": "لقد بدأت بالفعل في إجراء تعديلات عملية — وهذه خطوة مهمة."
+          },
+          {
+            "text": "نعم، أحاول تقليل النفايات أو استخدام البلاستيك كلما أمكنني ذلك",
+            "feedback": "هذا تغيير عملي جدًا، وسيؤتي ثماره بمرور الوقت."
+          },
+          {
+            "text": "قليلاً، ولكن ليس بشكل منتظم",
+            "feedback": "غالباً ما تبدأ الأمور بهذه الطريقة — خطوات صغيرة بين الحين والآخر."
+          },
+          {
+            "text": "ليس حقاً",
+            "feedback": "لا بأس — ملاحظة التغيير والتصرف بناءً عليه لا يحدثان دائماً في نفس الوقت."
+          },
+          {
+            "text": "لم أفكر في الأمر بهذه الطريقة من قبل",
+            "feedback": "هذا منطقي — أحياناً لا تكون الصلة واضحة في البداية."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "عندما تلاحظ هذه التغييرات، ما هي ردة فعلك الأولى؟",
+        "options": [
+          {
+            "text": "أريد أن أفهم ما الذي يجري",
+            "feedback": "غالبًا ما تكون الرغبة في الفهم هي أول رد فعل."
+          },
+          {
+            "text": "أشعر بالقلق لكنني لست متأكدًا مما يجب فعله",
+            "feedback": "هذا شعور شائع جدًا — القلق دون اتجاه واضح."
+          },
+          {
+            "text": "أحاول اتخاذ خطوات صغيرة حيثما أمكنني ذلك",
+            "feedback": "أنت تقوم بالفعل بالاستجابة بطرق عملية، حتى لو كانت صغيرة."
+          },
+          {
+            "text": "أتحدث إلى الآخرين أو أشجعهم على التحرك",
+            "feedback": "هذه خطوة متقدمة — فأنت تفكر بالفعل بما هو أبعد من نفسك."
+          },
+          {
+            "text": "لا أشعر بالقلق شخصيًا",
+            "feedback": "هذه وجهة نظرك — لا يمر الجميع بهذه التجربة بنفس الطريقة."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "ما أكثر شيء قد يفيدك في الوقت الحالي؟",
+        "options": [
+          {
+            "text": "تفسيرات واضحة لما يحدث ولماذا",
+            "feedback": "هذا منطقي — فوجود صورة واضحة يساعد على استيعاب كل شيء."
+          },
+          {
+            "text": "أمور بسيطة وعملية يمكنني القيام بها في المنزل",
+            "feedback": "أنت تبحث عن أمور يمكنك تطبيقها فعليًا — وهذا أمر رائع."
+          },
+          {
+            "text": "نصائح سريعة يمكنني تطبيقها على الفور",
+            "feedback": "غالبًا ما يكون البساطة والقدرة على التنفيذ هما السبيل الأفضل للنجاح."
+          },
+          {
+            "text": "طرق لزيادة الوعي أو إشراك الآخرين",
+            "feedback": "أنت مستعد لتتجاوز أفعالك الخاصة — هكذا يحدث التغيير."
+          },
+          {
+            "text": "أنا أستكشف فقط في الوقت الحالي",
+            "feedback": "هذه نقطة انطلاق جيدة — مجرد الاطلاع على ما هو متاح."
+          }
+        ]
+      }
+    ],
+    "profiles": [
+      {
+        "key": "A",
+        "title": "الملف الشخصي أ — بدءًا من الفهم",
+        "lead": "لقد بدأت تلاحظ تغييرات — وترغب في فهمها.",
+        "body": "بناءً على إجاباتك، فقد لاحظت علامات التغيير من حولك، حتى لو لم تكن واضحة أو مترابطة تمامًا بعد. وهذا أمر طبيعي. إن تخصيص بعض الوقت لفهم ما يحدث — ولماذا — يمكن أن يساعدك على رؤية الصورة الأكبر وما يعنيه ذلك بالنسبة لحياتك اليومية. إليك بعض النقاط التي يمكنك البدء بها، بناءً على ما لاحظته.",
+        "groups": [
+          {
+            "heading": "ابدأ من هنا",
+            "items": [
+              {
+                "cat": "دليل توضيحي",
+                "title": "كيف يؤثر تغير المناخ على منطقة البحر الأبيض المتوسط",
+                "link": "/explainers/what-is-climate-change/"
+              },
+              {
+                "cat": "دليل توضيحي",
+                "title": "المياه والغذاء والمناخ والطبيعة: ما الذي يتغير في منطقة البحر الأبيض المتوسط",
+                "link": "/explainers/water-food-climate-nature/"
+              },
+              {
+                "cat": "دليل توضيحي",
+                "title": "التعايش مع الحرارة: كيف تتكيف مجتمعات البحر الأبيض المتوسط مع موجات الحر",
+                "link": "/explainers/living-with-heat/"
+              }
+            ]
+          },
+          {
+            "heading": "إذا كنت ترغب في التعمق أكثر",
+            "items": [
+              {
+                "cat": "قائمة مرجعية",
+                "title": "٥ طرق بسيطة للتعامل مع موجة الحر",
+                "link": "/checklists/heatwave-today/"
+              },
+              {
+                "cat": "قائمة مرجعية",
+                "title": "٥ طرق بسيطة لتوفير المياه في المنزل",
+                "link": "/checklists/save-water-at-home/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "B",
+        "title": "الملف الشخصي ب — مستعد لاتخاذ الإجراءات",
+        "lead": "أنت بالفعل تفكر فيما يمكنك فعله.",
+        "body": "من إجاباتك، يتضح أنك تلاحظ التغييرات وتقوم بالفعل بتعديل بعض العادات، أو تفكر في كيفية القيام بذلك. هكذا يبدأ التغيير — خطوة بخطوة، في الروتين اليومي. إليك بعض الأمور البسيطة التي يمكنك البناء عليها، بدءًا مما تفعله بالفعل.",
+        "groups": [
+          {
+            "heading": "ابدأ بشيء يمكنك القيام به على الفور",
+            "items": [
+              {
+                "cat": "قائمة مرجعية",
+                "title": "٥ طرق بسيطة لتوفير المياه في المنزل",
+                "link": "/checklists/save-water-at-home/"
+              },
+              {
+                "cat": "قائمة مرجعية",
+                "title": "٥ طرق بسيطة لتجنب استخدام المواد البلاستيكية أحادية الاستخدام عند التنقل",
+                "link": "/checklists/avoid-single-use-plastics/"
+              },
+              {
+                "cat": "قائمة مرجعية",
+                "title": "٥ طرق بسيطة لتقليل هدر الطعام",
+                "link": "/checklists/waste-less-food/"
+              }
+            ]
+          },
+          {
+            "heading": "ابني على ذلك",
+            "items": [
+              {
+                "cat": "دليل إرشادي",
+                "title": "كيفية الحد من استهلاكك للبلاستيك أحادي الاستخدام",
+                "link": "/how-to-guides/reduce-single-use-plastics/"
+              },
+              {
+                "cat": "دليل إرشادي",
+                "title": "كيفية تقليل هدر الطعام في المنزل",
+                "link": "/how-to-guides/reduce-food-waste-at-home/"
+              },
+              {
+                "cat": "دليل إرشادي",
+                "title": "كيفية تحويل شرفتكم أو سطحكم إلى حديقة صغيرة للأغذية",
+                "link": "/how-to-guides/rooftop-balcony-food-garden/"
+              }
+            ]
+          },
+          {
+            "heading": "اكتشف الصلة بين الأمور",
+            "items": [
+              {
+                "cat": "دليل توضيحي",
+                "title": "البلاستيك ليس مجرد تلوث — إنه مشكلة مناخية",
+                "link": "/explainers/plastic-and-climate/"
+              },
+              {
+                "cat": "دليل توضيحي",
+                "title": "التعايش مع الحرارة: كيف تتكيف مجتمعات البحر الأبيض المتوسط مع موجات الحر",
+                "link": "/explainers/living-with-heat/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "C",
+        "title": "الملف الشخصي ج — جاهز لإشراك الآخرين",
+        "lead": "أنت لا تكتفي بملاحظة التغيير فحسب — بل أنت مستعد للذهاب إلى أبعد من ذلك.",
+        "body": "تُظهر إجاباتك أنك قد بدأت بالفعل في التصرف أو التفكير بما يتجاوز عاداتك الشخصية. أنت في وضع يسمح لك بمشاركة ما تعرفه، أو بدء حوارات، أو تشجيع الآخرين بطرق تبدو طبيعية بالنسبة لك. إليك بعض الطرق التي يمكنك من خلالها البناء على ذلك والوصول إلى الآخرين من حولك.",
+        "groups": [
+          {
+            "heading": "ابدأ من هنا",
+            "items": [
+              {
+                "cat": "دليل إرشادي",
+                "title": "التواصل بشأن المناخ",
+                "link": "/communicating-climate-effectively/"
+              },
+              {
+                "cat": "دليل إرشادي",
+                "title": "التعليم والتيسير",
+                "link": "/teach-youth-leaders/"
+              }
+            ]
+          },
+          {
+            "heading": "دعّم رسالتك",
+            "items": [
+              {
+                "cat": "دليل توضيحي",
+                "title": "كيف يؤثر تغير المناخ على منطقة البحر الأبيض المتوسط",
+                "link": "/explainers/what-is-climate-change/"
+              },
+              {
+                "cat": "دليل توضيحي",
+                "title": "المياه والغذاء والمناخ والطبيعة: ما الذي يتغير في منطقة البحر الأبيض المتوسط",
+                "link": "/explainers/water-food-climate-nature/"
+              },
+              {
+                "cat": "دليل توضيحي",
+                "title": "البلاستيك ليس مجرد تلوث — إنه مشكلة مناخية",
+                "link": "/explainers/plastic-and-climate/"
+              }
+            ]
+          },
+          {
+            "heading": "استخدم أمثلة عملية",
+            "items": [
+              {
+                "cat": "دليل إرشادي",
+                "title": "كيفية الحد من استهلاكك للبلاستيك أحادي الاستخدام",
+                "link": "/how-to-guides/reduce-single-use-plastics/"
+              },
+              {
+                "cat": "دليل إرشادي",
+                "title": "كيفية تقليل هدر الطعام في المنزل",
+                "link": "/how-to-guides/reduce-food-waste-at-home/"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "fr": {
+    "intro": {
+      "eyebrow": "5 questions · 3 minutes",
+      "title": "Votre climat est-il déjà en train de changer ?",
+      "lead": "Ceci n’est pas un test — il n’y a ni bonne ni mauvaise réponse. Découvrez où vous en êtes et accédez à des ressources faites pour vous.",
+      "note": "",
+      "start": "Je fais le quiz"
+    },
+    "ui": {
+      "progress": "Question {n} sur {total}",
+      "multi": "Plusieurs réponses possibles",
+      "single": "Une seule réponse",
+      "next": "Suivant",
+      "back": "Retour",
+      "results": "Voir mes résultats",
+      "retake": "Refaire le quiz"
+    },
+    "questions": [
+      {
+        "multi": true,
+        "text": "En repensant aux dernières années, qu’est-ce qui vous semble différent là où vous vivez ?",
+        "options": [
+          {
+            "text": "Les étés semblent plus chauds ou plus longs",
+            "feedback": "Vous ressentez clairement la chaleur — des étés plus longs et plus intenses, difficile de ne pas le remarquer."
+          },
+          {
+            "text": "La météo paraît plus imprévisible, avec des épisodes soudains de pluie, de chaleur ou de froid",
+            "feedback": "Ce sentiment d’imprévisibilité, beaucoup de personnes commencent à le ressentir en Méditerranée."
+          },
+          {
+            "text": "L’approvisionnement en eau est moins fiable, avec des pénuries, une pression plus faible ou des problèmes de qualité",
+            "feedback": "Les changements liés à l’eau sont souvent parmi les premiers signes que l’on perçoit, surtout dans notre région."
+          },
+          {
+            "text": "Je n’ai pas vraiment remarqué de changements",
+            "feedback": "C’est tout à fait possible — les changements ne se ressentent pas de la même manière partout."
+          },
+          {
+            "text": "Je ne suis pas sûr·e",
+            "feedback": "Ce doute est normal — il n’est pas toujours facile de distinguer ce qui change vraiment."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "Aujourd’hui, qu’est-ce qui a le plus d’impact sur votre vie quotidienne ?",
+        "options": [
+          {
+            "text": "La chaleur rend plus difficile le sommeil, les déplacements ou la concentration",
+            "feedback": "Ce type de chaleur peut vraiment influencer le déroulement de la journée."
+          },
+          {
+            "text": "L’usage de l’eau demande plus d’attention (économiser, stocker, planifier)",
+            "feedback": "On dirait que l’eau est déjà quelque chose à quoi vous faites plus attention."
+          },
+          {
+            "text": "L’alimentation ou le coût de la vie semblent moins stables qu’avant",
+            "feedback": "Beaucoup de personnes commencent à ressentir ces changements dans leur quotidien."
+          },
+          {
+            "text": "Les déchets et la pollution sont plus visibles autour de moi",
+            "feedback": "Quand cela devient visible, difficile de l’ignorer."
+          },
+          {
+            "text": "Aucun de ces éléments, vraiment",
+            "feedback": "C’est une bonne chose — tout le monde n’est pas affecté de la même manière."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "Avez-vous déjà changé certaines habitudes au quotidien à cause de cela ?",
+        "options": [
+          {
+            "text": "Oui, j’ai commencé à adapter ma consommation d’eau ou d’énergie",
+            "feedback": "Vous avez déjà commencé à ajuster certaines habitudes — c’est une étape importante."
+          },
+          {
+            "text": "Oui, j’essaie de réduire mes déchets ou mon usage du plastique",
+            "feedback": "C’est un changement concret, qui fait la différence avec le temps."
+          },
+          {
+            "text": "Un peu, mais pas de façon régulière",
+            "feedback": "C’est souvent comme ça que ça commence — par de petits gestes."
+          },
+          {
+            "text": "Pas vraiment",
+            "feedback": "C’est normal — prendre conscience et agir ne se font pas toujours en même temps."
+          },
+          {
+            "text": "Je n’y avais pas pensé de cette façon",
+            "feedback": "C’est compréhensible — le lien n’est pas toujours évident au départ."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "Quand vous remarquez ces changements, quelle est votre première réaction ?",
+        "options": [
+          {
+            "text": "J’ai envie de comprendre ce qui se passe",
+            "feedback": "Chercher à comprendre est souvent le premier réflexe."
+          },
+          {
+            "text": "Je suis inquiet·ète, mais je ne sais pas quoi faire",
+            "feedback": "C’est un sentiment très courant — une inquiétude sans toujours savoir par où commencer."
+          },
+          {
+            "text": "J’essaie d’agir à mon échelle, avec de petits gestes",
+            "feedback": "Vous réagissez déjà de manière concrète, même à petite échelle."
+          },
+          {
+            "text": "J’en parle autour de moi ou j’encourage les autres à agir",
+            "feedback": "Vous allez déjà plus loin — vous pensez aussi aux autres."
+          },
+          {
+            "text": "Je ne me sens pas personnellement concerné·e",
+            "feedback": "Chacun vit ces changements différemment — c’est votre ressenti."
+          }
+        ]
+      },
+      {
+        "multi": false,
+        "text": "Qu’est-ce qui vous serait le plus utile en ce moment ?",
+        "options": [
+          {
+            "text": "Des explications claires sur ce qui se passe et pourquoi",
+            "feedback": "C’est essentiel — comprendre aide à y voir plus clair dans le reste."
+          },
+          {
+            "text": "Des actions simples et concrètes à faire chez moi",
+            "feedback": "Vous cherchez des solutions pratiques — c’est un très bon point de départ."
+          },
+          {
+            "text": "Des conseils rapides à appliquer tout de suite",
+            "feedback": "Aller à l’essentiel, c’est souvent ce qui fonctionne le mieux."
+          },
+          {
+            "text": "Des idées pour sensibiliser ou impliquer d’autres personnes",
+            "feedback": "Vous êtes prêt·e à aller plus loin — c’est comme ça que le changement se diffuse."
+          },
+          {
+            "text": "Je suis simplement en train de découvrir pour le moment",
+            "feedback": "C’est déjà une première étape — explorer et s’informer."
+          }
+        ]
+      }
+    ],
+    "profiles": [
+      {
+        "key": "A",
+        "title": "Profil A — Commencer par comprendre",
+        "lead": "Vous commencez à remarquer des changements — et vous cherchez à y voir plus clair.",
+        "body": "D’après vos réponses, vous avez déjà perçu des signes d’évolution autour de vous, même s’ils ne sont pas encore toujours faciles à relier entre eux. C’est tout à fait normal. Prendre un peu de temps pour comprendre ce qui se passe — et pourquoi — peut vous aider à mieux saisir l’ensemble et ce que cela implique pour votre vie quotidienne. Voici quelques points de départ, en lien avec ce que vous avez observé.",
+        "groups": [
+          {
+            "heading": "Pour commencer",
+            "items": [
+              {
+                "cat": "Décryptage",
+                "title": "Qu’est-ce que le changement climatique, et comment affecte-t-il la Méditerranée ?",
+                "link": "/explainers/what-is-climate-change/"
+              },
+              {
+                "cat": "Décryptage",
+                "title": "Eau, alimentation, climat et nature : ce qui change en Méditerranée",
+                "link": "/explainers/water-food-climate-nature/"
+              },
+              {
+                "cat": "Décryptage",
+                "title": "Face à la chaleur : comment les communautés méditerranéennes s’adaptent",
+                "link": "/explainers/living-with-heat/"
+              }
+            ]
+          },
+          {
+            "heading": "Pour aller un peu plus loin",
+            "items": [
+              {
+                "cat": "Checklist",
+                "title": "5 gestes simples pour faire face à une vague de chaleur",
+                "link": "/checklists/heatwave-today/"
+              },
+              {
+                "cat": "Checklist",
+                "title": "5 gestes simples pour économiser l’eau à la maison",
+                "link": "/checklists/save-water-at-home/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "B",
+        "title": "Profil B — Prêt·e à passer à l’action",
+        "lead": "Vous réfléchissez déjà à ce que vous pouvez faire.",
+        "body": "Vos réponses montrent que vous remarquez les changements et que vous avez déjà commencé à adapter certaines habitudes — ou que vous y pensez. C’est ainsi que le changement commence : pas à pas, dans les gestes du quotidien. Voici quelques actions simples à renforcer, à partir de ce que vous faites déjà.",
+        "groups": [
+          {
+            "heading": "Commencez par quelque chose de concret",
+            "items": [
+              {
+                "cat": "Checklist",
+                "title": "5 gestes simples pour économiser l’eau à la maison",
+                "link": "/checklists/save-water-at-home/"
+              },
+              {
+                "cat": "Checklist",
+                "title": "5 gestes simples pour éviter les plastiques à l’extérieur",
+                "link": "/5-reflexes-simples-pour-eviter-le-plastique-a-usage-unique/"
+              },
+              {
+                "cat": "Checklist",
+                "title": "5 gestes simples pour réduire le gaspillage alimentaire",
+                "link": "/checklists/waste-less-food/"
+              }
+            ]
+          },
+          {
+            "heading": "Allez plus loin",
+            "items": [
+              {
+                "cat": "Guide pratique",
+                "title": "Comment réduire les plastiques à usage unique",
+                "link": "/how-to-guides/reduce-single-use-plastics/"
+              },
+              {
+                "cat": "Guide pratique",
+                "title": "Comment réduire le gaspillage alimentaire à la maison",
+                "link": "/how-to-guides/reduce-food-waste-at-home/"
+              },
+              {
+                "cat": "Guide pratique",
+                "title": "Transformer son balcon ou son toit en mini-jardin",
+                "link": "/how-to-guides/rooftop-balcony-food-garden/"
+              }
+            ]
+          },
+          {
+            "heading": "Comprendre les liens",
+            "items": [
+              {
+                "cat": "Décryptage",
+                "title": "Le plastique n’est pas qu’une pollution — c’est aussi un problème climatique",
+                "link": "/explainers/plastic-and-climate/"
+              },
+              {
+                "cat": "Décryptage",
+                "title": "Face à la chaleur : comment les communautés méditerranéennes s’adaptent",
+                "link": "/explainers/living-with-heat/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "C",
+        "title": "Profil C — Prêt·e à mobiliser autour de soi",
+        "lead": "Vous ne vous contentez pas de remarquer les changements — vous êtes prêt·e à aller plus loin.",
+        "body": "Vos réponses montrent que vous agissez déjà, ou que vous réfléchissez au-delà de vos propres habitudes. Vous êtes en mesure de partager ce que vous savez, d’ouvrir la discussion ou d’encourager d’autres personnes à agir, à votre manière. Voici quelques pistes pour renforcer cet engagement et toucher davantage de personnes autour de vous.",
+        "groups": [
+          {
+            "heading": "Pour commencer",
+            "items": [
+              {
+                "cat": "BOÎTE À OUTILS",
+                "title": "Communiquer efficacement sur le climat",
+                "link": "/communicating-climate-effectively/"
+              },
+              {
+                "cat": "BOÎTE À OUTILS",
+                "title": "Enseigner et mobiliser",
+                "link": "/#teachFP"
+              }
+            ]
+          },
+          {
+            "heading": "Renforcer votre message",
+            "items": [
+              {
+                "cat": "Décryptage",
+                "title": "Comment le changement climatique affecte la Méditerranée",
+                "link": "/explainers/what-is-climate-change/"
+              },
+              {
+                "cat": "Décryptage",
+                "title": "Eau, alimentation, climat et nature : ce qui change en Méditerranée",
+                "link": "/explainers/water-food-climate-nature/"
+              },
+              {
+                "cat": "Décryptage",
+                "title": "Pourquoi le plastique est aussi un problème climatique",
+                "link": "/explainers/plastic-and-climate/"
+              }
+            ]
+          },
+          {
+            "heading": "S’appuyer sur des exemples concrets",
+            "items": [
+              {
+                "cat": "Guide pratique",
+                "title": "Comment réduire les plastiques à usage unique",
+                "link": "/how-to-guides/reduce-single-use-plastics/"
+              },
+              {
+                "cat": "Guide pratique",
+                "title": "Comment réduire le gaspillage alimentaire à la maison",
+                "link": "/how-to-guides/reduce-food-waste-at-home/"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

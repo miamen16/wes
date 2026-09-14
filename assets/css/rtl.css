@@ -1,0 +1,65 @@
+/* .rtl .ag__tabs, .rtl .seg-tabs {
+    margin-block: 30px !important;
+    margin-inline-start: 120px !important;
+} */
+.rtl .section__lead {
+    max-width: 1193px;
+}
+.rtl .org {
+    flex-direction: row-reverse;
+}
+.rtl .filter {
+    flex-direction: row-reverse;
+}
+.rtl .wes-modal__body strong {
+    font-style: normal;
+}
+.rtl .med {
+    clip-path: polygon(100% 0, calc(50% - 107px) 0, 0 10vw, 0 100%, 100% 100%);
+}
+.rtl section#teach {
+    overflow: hidden;
+}
+.rtl .fa-angle-right , .rtl .fa-angle-left{
+    transform: rotate(180deg);
+}
+.rtl .lesson-hero__intro {
+    font-style: normal;
+}
+.rtl .block-resource-cards--rich {
+    /*background-color: #fdf5ea;*/
+}
+
+.rtl article.fresource {
+    background-color: #def1f3;
+}
+.rtl .block-cards .ecard__front .ecard__title {
+    padding: 12px 20px 20px 20px;
+    height: 80px;
+}
+.rtl .principles__tags, .rtl span.tindex__tags {
+    font-style: normal;
+}
+.rtl.page-id-272 .seg-tabs ,.rtl.page-id-275 .seg-tabs {
+    margin: 10px 0px 30px 0px!important;
+}
+.rtl .rc2__cta{
+    justify-content: start !important;
+}
+.rtl .rc-pagination.rc-pagination--ajax {
+    direction: ltr;
+}
+.rtl .rc-pagination--ajax ul {
+    direction: rtl;
+}
+.rtl .related__text-content {
+    text-align: right !important;
+}
+.rtl .quizc__res-item {
+    padding: 18px 0px 18px 36px;
+}
+.page-id-3 main#content,.page-id-1766 main#content,.page-id-1772  main#content,.page-id-1774  main#content,.page-id-1778  main#content,.page-id-1770  main#content{
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter-nav);
+}

@@ -1,0 +1,49 @@
+/* =========================================================
+   WES — Design Tokens (extracted from Figma "WES preview")
+   ========================================================= */
+:root {
+  /* ---- Brand colors ---- */
+  --c-blue:        #1A4A85; /* primary deep blue  (62 uses) */
+  --c-teal:        #009BA6; /* secondary teal     (19) */
+  --c-gold:        #FFAE00; /* accent gold        (10) */
+  --c-orange:      #ED6708; /* accent orange      (9) */
+  --c-green:       #A0D081; /* accent green       (6) */
+  --c-white:       #FFFFFF;
+
+  /* ---- Surfaces / tints ---- */
+  --c-cream:       #FDF5EA;
+  --c-cream-2:     #FCF2E3;
+  --c-sand-40:     rgba(248,223,186,0.40);
+  --c-sand-70:     rgba(248,223,186,0.70);
+  --c-teal-tint:   #DEF1F3;
+  --c-teal-20:     rgba(0,155,166,0.20);
+  --c-green-tint:  #D6ECCD;
+  --c-gray-100:    #F2F2F7;
+  --c-gray-300:    #D1D1D6;
+  --c-gray-500:    #B2B2B2;
+
+  /* ---- Typography ---- */
+  /* Design uses Roboto Condensed (Latin); Noto Sans Arabic next so Arabic glyphs fall through. */
+  --font: "Roboto Condensed", "Noto Sans Arabic", system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+
+  --fs-h1:       80px;  --lh-h1: 1.0;
+  --fs-h2:       50px;  --lh-h2: 1.17;
+  --fs-lead:     40px;  --lh-lead: 1.17;
+  --fs-herodesc: 31px;  --lh-herodesc: 1.3;
+  --fs-22:       22px;  --lh-22: 1.3;
+  --fs-18:       18px;  --lh-18: 1.3;
+  --fs-16:       16px;  --lh-16: 1.3;
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+
+  /* ---- Layout ---- */
+  --container: 1440px;
+  --gutter: 120px;        /* hero/content left gutter */
+  --gutter-nav: 60px;     /* nav gutter */
+  --radius: 16px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+}

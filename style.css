@@ -1,0 +1,23 @@
+/*
+Theme Name: WES — Our Climate, Our Community
+Theme URI: https://wes.test
+Author: WES-BCA
+Description: Pixel-perfect custom theme for the WES "Our Climate, Our Community" Mediterranean climate-education website, built from the Figma design. Bilingual (EN/AR), RTL-ready.
+Version: 0.1.0
+Requires at least: 6.5
+Requires PHP: 8.1
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: wes
+*/
+.page-id-2717 main#content {
+    width: 100%;
+    margin-inline: auto;
+    position: relative;
+    z-index: 1;
+    padding-inline-start: var(--gutter);
+    padding: 110px;
+}
+input#mailster-id-736c61 {
+    border: 2px solid var(--c-teal);
+}
