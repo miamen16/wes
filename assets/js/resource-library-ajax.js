@@ -8,6 +8,14 @@ jQuery(document).ready(function($) {
     function getBlockSettings(block) {
         var uid = block.data('uid') || '';
         if (!pageMap[uid]) pageMap[uid] = 1;
+
+        var selectedTerms = block.data('selected-terms') || '';
+        if (typeof selectedTerms === 'string') {
+            selectedTerms = selectedTerms.split(',').map(function(term) {
+                return $.trim(term);
+            }).filter(Boolean);
+        }
+
         return {
             cpt: block.data('cpt') || '',
             tax: block.data('tax') || '',
@@ -16,7 +24,8 @@ jQuery(document).ready(function($) {
             orderby: block.data('orderby') || 'date',
             order: block.data('order') || 'DESC',
             showFlags: block.data('show-flags') || '',
-            selectedTerms: block.data('selected-terms') || '',
+            selectedTerms: selectedTerms,
+            layoutStyle: block.data('layout') || 'list',
             uid: uid
         };
     }
@@ -40,12 +49,13 @@ jQuery(document).ready(function($) {
                 tax: settings.tax,
                 filter: filterSlug,
                 limit: settings.limit,
-                posts_per_page: settings.postsPerPage, 
+                posts_per_page: settings.postsPerPage,
                 orderby: settings.orderby,
                 order: settings.order,
                 page: page,
                 show_flags: settings.showFlags,
-                selected_terms: settings.selectedTerms
+                selected_terms: settings.selectedTerms,
+                layout_style: settings.layoutStyle
             },
             success: function(response) {
                 listWrap.html(response);
