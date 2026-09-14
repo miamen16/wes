@@ -30,7 +30,7 @@ function wes_register_quiz_cpt() {
 				'search_items'  => 'Search Quizzes',
 				'not_found'     => 'No quizzes found',
 				'all_items'     => 'All Quizzes',
-				'menu_name'    => 'Quizzes',
+				'menu_name'     => 'Quizzes',
 			),
 			'public'             => true,
 			'has_archive'        => true,
@@ -258,85 +258,151 @@ function wes_quiz_import_admin_notice() {
 add_action( 'admin_notices', 'wes_quiz_import_admin_notice' );
 
 /**
- * Import all three languages from the existing JSON file.
+ * Validate one language payload before importing it.
+ *
+ * @param array  $data Language payload.
+ * @param string $lang Language slug.
+ * @return array{errors: array, warnings: array, questions: int, profiles: int}
  */
-function wes_import_quiz_json() {
-	if ( ! current_user_can( 'edit_posts' ) ) {
-		wp_die( esc_html__( 'You are not allowed to import quizzes.', 'wes' ) );
-	}
-	check_admin_referer( 'wes_import_quiz_json' );
+function wes_validate_quiz_language( $data, $lang ) {
+	$errors   = array();
+	$warnings = array();
+	$required = array( 'intro', 'ui', 'questions', 'profiles' );
 
-	$file = get_template_directory() . '/assets/data/quiz.json';
-	$raw  = file_exists( $file ) ? json_decode( file_get_contents( $file ), true ) : array();
-	$langs = array( 'en', 'ar', 'fr' );
-
-	if ( empty( $raw ) || ! is_array( $raw ) ) {
-		wp_die( esc_html__( 'The quiz JSON file could not be read.', 'wes' ) );
+	foreach ( $required as $key ) {
+		if ( ! isset( $data[ $key ] ) || ! is_array( $data[ $key ] ) ) {
+			$errors[] = sprintf( '%s: missing or invalid %s.', strtoupper( $lang ), $key );
+		}
 	}
 
-	$created = array();
+	if ( ! empty( $errors ) ) {
+		return array(
+			'errors'    => $errors,
+			'warnings'  => $warnings,
+			'questions' => 0,
+			'profiles'  => 0,
+		);
+	}
 
-	foreach ( $langs as $lang ) {
-		if ( empty( $raw[ $lang ] ) ) {
+	$intro_keys = array( 'eyebrow', 'title', 'lead', 'note', 'start' );
+	$ui_keys    = array( 'progress', 'multi', 'single', 'next', 'back', 'results', 'retake' );
+
+	foreach ( $intro_keys as $key ) {
+		if ( ! array_key_exists( $key, $data['intro'] ) ) {
+			$errors[] = sprintf( '%s: intro.%s is missing.', strtoupper( $lang ), $key );
+		}
+	}
+	foreach ( $ui_keys as $key ) {
+		if ( ! array_key_exists( $key, $data['ui'] ) ) {
+			$errors[] = sprintf( '%s: ui.%s is missing.', strtoupper( $lang ), $key );
+		}
+	}
+
+	$question_count = count( $data['questions'] );
+	if ( 5 !== $question_count ) {
+		$warnings[] = sprintf( '%s: expected 5 questions, found %d.', strtoupper( $lang ), $question_count );
+	}
+
+	foreach ( $data['questions'] as $qi => $question ) {
+		if ( ! is_array( $question ) ) {
+			$errors[] = sprintf( '%s: question %d is invalid.', strtoupper( $lang ), $qi + 1 );
 			continue;
 		}
+		foreach ( array( 'multi', 'text', 'options' ) as $key ) {
+			if ( ! array_key_exists( $key, $question ) ) {
+				$errors[] = sprintf( '%s: question %d is missing %s.', strtoupper( $lang ), $qi + 1, $key );
+			}
+		}
+		if ( isset( $question['options'] ) && is_array( $question['options'] ) ) {
+			if ( 5 !== count( $question['options'] ) ) {
+				$warnings[] = sprintf( '%s: question %d has %d options; expected 5.', strtoupper( $lang ), $qi + 1, count( $question['options'] ) );
+			}
+			foreach ( $question['options'] as $oi => $option ) {
+				if ( ! is_array( $option ) ) {
+					$errors[] = sprintf( '%s: question %d option %d is invalid.', strtoupper( $lang ), $qi + 1, $oi + 1 );
+					continue;
+				}
+				foreach ( array( 'text', 'feedback' ) as $key ) {
+					if ( ! array_key_exists( $key, $option ) ) {
+						$errors[] = sprintf( '%s: question %d option %d is missing %s.', strtoupper( $lang ), $qi + 1, $oi + 1, $key );
+					}
+				}
+			}
+		}
+	}
 
-		$existing = get_posts(
-			array(
-				'post_type'      => 'quiz',
-				'post_status'    => 'any',
-				'posts_per_page' => 1,
-				'fields'         => 'ids',
-				'meta_key'       => '_wes_quiz_import_lang',
-				'meta_value'     => $lang,
-			)
-		);
+	$profile_count = count( $data['profiles'] );
+	if ( 3 !== $profile_count ) {
+		$warnings[] = sprintf( '%s: expected 3 profiles, found %d.', strtoupper( $lang ), $profile_count );
+	}
 
-		$post_id = ! empty( $existing ) ? (int) $existing[0] : wp_insert_post(
-			array(
-				'post_type'   => 'quiz',
-				'post_status' => 'publish',
-				'post_title'  => isset( $raw[ $lang ]['intro']['title'] ) ? wp_strip_all_tags( $raw[ $lang ]['intro']['title'] ) : 'Climate Quiz',
-				'meta_input'  => array( '_wes_quiz_import_lang' => $lang ),
-			)
-		);
-
-		if ( ! $post_id || is_wp_error( $post_id ) ) {
+	$profile_keys = array();
+	foreach ( $data['profiles'] as $pi => $profile ) {
+		if ( ! is_array( $profile ) ) {
+			$errors[] = sprintf( '%s: profile %d is invalid.', strtoupper( $lang ), $pi + 1 );
 			continue;
 		}
-
-		update_post_meta( $post_id, '_wes_quiz_import_lang', $lang );
-		wes_import_quiz_language_fields( $post_id, $raw[ $lang ] );
-
-		if ( function_exists( 'pll_set_post_language' ) ) {
-			pll_set_post_language( $post_id, $lang );
+		foreach ( array( 'key', 'title', 'lead', 'body', 'groups' ) as $key ) {
+			if ( ! array_key_exists( $key, $profile ) ) {
+				$errors[] = sprintf( '%s: profile %d is missing %s.', strtoupper( $lang ), $pi + 1, $key );
+			}
 		}
-
-		$created[ $lang ] = $post_id;
+		if ( isset( $profile['key'] ) ) {
+			$profile_keys[] = (string) $profile['key'];
+		}
+		if ( isset( $profile['groups'] ) && is_array( $profile['groups'] ) ) {
+			foreach ( $profile['groups'] as $gi => $group ) {
+				if ( ! is_array( $group ) ) {
+					$errors[] = sprintf( '%s: profile %d group %d is invalid.', strtoupper( $lang ), $pi + 1, $gi + 1 );
+					continue;
+				}
+				foreach ( array( 'heading', 'items' ) as $key ) {
+					if ( ! array_key_exists( $key, $group ) ) {
+						$errors[] = sprintf( '%s: profile %d group %d is missing %s.', strtoupper( $lang ), $pi + 1, $gi + 1, $key );
+					}
+				}
+				if ( isset( $group['items'] ) && is_array( $group['items'] ) ) {
+					foreach ( $group['items'] as $ii => $item ) {
+						if ( ! is_array( $item ) ) {
+							$errors[] = sprintf( '%s: profile %d group %d item %d is invalid.', strtoupper( $lang ), $pi + 1, $gi + 1, $ii + 1 );
+							continue;
+						}
+						foreach ( array( 'cat', 'title', 'link' ) as $key ) {
+							if ( ! array_key_exists( $key, $item ) ) {
+								$errors[] = sprintf( '%s: profile %d group %d item %d is missing %s.', strtoupper( $lang ), $pi + 1, $gi + 1, $ii + 1, $key );
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
-	if ( count( $created ) > 1 && function_exists( 'pll_save_post_translations' ) ) {
-		pll_save_post_translations( $created );
+	$expected_keys = array( 'A', 'B', 'C' );
+	if ( count( array_unique( $profile_keys ) ) !== 3 || array_diff( $expected_keys, $profile_keys ) ) {
+		$errors[] = sprintf( '%s: profiles must contain unique A, B and C keys.', strtoupper( $lang ) );
 	}
 
-	update_option( 'wes_quiz_json_imported', current_time( 'mysql' ), false );
-	wp_safe_redirect( admin_url( 'edit.php?post_type=quiz&wes_quiz_imported=1' ) );
-	exit;
+	return array(
+		'errors'    => $errors,
+		'warnings'  => $warnings,
+		'questions' => $question_count,
+		'profiles'  => $profile_count,
+	);
 }
-add_action( 'admin_post_wes_import_quiz_json', 'wes_import_quiz_json' );
 
 /**
- * Save one language section into the ACF fields.
+ * Import one language's ACF fields.
  *
  * @param int   $post_id Quiz post ID.
- * @param array $data Language data.
+ * @param array $data Language payload.
  * @return void
  */
 function wes_import_quiz_language_fields( $post_id, $data ) {
-	$intro = isset( $data['intro'] ) && is_array( $data['intro'] ) ? $data['intro'] : array();
-	$ui    = isset( $data['ui'] ) && is_array( $data['ui'] ) ? $data['ui'] : array();
+	$intro = $data['intro'] ?? array();
+	$ui    = $data['ui'] ?? array();
 
-	$map = array(
+	$fields = array(
 		'quiz_intro_eyebrow' => $intro['eyebrow'] ?? '',
 		'quiz_intro_title'   => $intro['title'] ?? '',
 		'quiz_intro_lead'    => $intro['lead'] ?? '',
@@ -351,8 +417,8 @@ function wes_import_quiz_language_fields( $post_id, $data ) {
 		'quiz_ui_retake'     => $ui['retake'] ?? '',
 	);
 
-	foreach ( $map as $field => $value ) {
-		update_field( $field, $value, $post_id );
+	foreach ( $fields as $name => $value ) {
+		update_field( $name, is_scalar( $value ) ? (string) $value : '', $post_id );
 	}
 
 	$questions = array();
@@ -365,7 +431,7 @@ function wes_import_quiz_language_fields( $post_id, $data ) {
 			);
 		}
 		$questions[] = array(
-			'multi'   => ! empty( $question['multi'] ) ? 1 : 0,
+			'multi'   => ! empty( $question['multi'] ),
 			'text'    => (string) ( $question['text'] ?? '' ),
 			'options' => $options,
 		);
@@ -401,10 +467,136 @@ function wes_import_quiz_language_fields( $post_id, $data ) {
 }
 
 /**
- * Show importer result notice.
+ * Render an importer result notice after redirect.
  */
-add_action( 'admin_notices', function () {
-	if ( isset( $_GET['wes_quiz_imported'] ) ) {
-		echo '<div class="notice notice-success is-dismissible"><p>Quiz JSON imported into the EN / AR / FR Quiz posts.</p></div>';
+function wes_quiz_import_result_notice() {
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		return;
 	}
-} );
+	$report = get_transient( 'wes_quiz_import_report' );
+	if ( false === $report || ! is_array( $report ) ) {
+		return;
+	}
+	delete_transient( 'wes_quiz_import_report' );
+
+	$class = ! empty( $report['errors'] ) ? 'notice-error' : 'notice-success';
+	echo '<div class="notice ' . esc_attr( $class ) . '"><p><strong>WES Quiz import:</strong></p><ul style="list-style:disc;margin-left:20px;">';
+	foreach ( (array) ( $report['success'] ?? array() ) as $message ) {
+		echo '<li>' . esc_html( $message ) . '</li>';
+	}
+	foreach ( (array) ( $report['warnings'] ?? array() ) as $message ) {
+		echo '<li><strong>Warning:</strong> ' . esc_html( $message ) . '</li>';
+	}
+	foreach ( (array) ( $report['errors'] ?? array() ) as $message ) {
+		echo '<li><strong>Error:</strong> ' . esc_html( $message ) . '</li>';
+	}
+	echo '</ul></div>';
+}
+add_action( 'admin_notices', 'wes_quiz_import_result_notice', 20 );
+
+/**
+ * Import all three languages from the existing JSON file.
+ */
+function wes_import_quiz_json() {
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		wp_die( esc_html__( 'You are not allowed to import quizzes.', 'wes' ) );
+	}
+	check_admin_referer( 'wes_import_quiz_json' );
+
+	$file = get_template_directory() . '/assets/data/quiz.json';
+	$raw  = file_exists( $file ) ? wp_json_file_decode( $file, array( 'associative' => true ) ) : null;
+	$langs = array( 'en', 'ar', 'fr' );
+	$report = array(
+		'success'  => array(),
+		'warnings' => array(),
+		'errors'   => array(),
+	);
+
+	if ( empty( $raw ) || ! is_array( $raw ) ) {
+		$report['errors'][] = 'The quiz JSON file could not be read or decoded.';
+		set_transient( 'wes_quiz_import_report', $report, MINUTE_IN_SECONDS );
+		wp_safe_redirect( admin_url( 'edit.php?post_type=quiz' ) );
+		exit;
+	}
+
+	$created = array();
+
+	foreach ( $langs as $lang ) {
+		if ( empty( $raw[ $lang ] ) || ! is_array( $raw[ $lang ] ) ) {
+			$report['errors'][] = sprintf( '%s: language data is missing.', strtoupper( $lang ) );
+			continue;
+		}
+
+		$validation = wes_validate_quiz_language( $raw[ $lang ], $lang );
+		$report['warnings'] = array_merge( $report['warnings'], $validation['warnings'] );
+		if ( ! empty( $validation['errors'] ) ) {
+			$report['errors'] = array_merge( $report['errors'], $validation['errors'] );
+			continue;
+		}
+
+		$existing = get_posts(
+			array(
+				'post_type'      => 'quiz',
+				'post_status'    => 'any',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'meta_key'       => '_wes_quiz_import_lang',
+				'meta_value'     => $lang,
+			)
+		);
+
+		$post_id = ! empty( $existing ) ? (int) $existing[0] : wp_insert_post(
+			array(
+				'post_type'   => 'quiz',
+				'post_status' => 'publish',
+				'post_title'  => isset( $raw[ $lang ]['intro']['title'] ) ? wp_strip_all_tags( $raw[ $lang ]['intro']['title'] ) : 'Climate Quiz',
+				'meta_input'  => array( '_wes_quiz_import_lang' => $lang ),
+			)
+		);
+
+		if ( ! $post_id || is_wp_error( $post_id ) ) {
+			$report['errors'][] = sprintf( '%s: could not create or find the Quiz post.', strtoupper( $lang ) );
+			continue;
+		}
+
+		wp_update_post(
+			array(
+			'ID'         => $post_id,
+			'post_title' => isset( $raw[ $lang ]['intro']['title'] ) ? wp_strip_all_tags( $raw[ $lang ]['intro']['title'] ) : 'Climate Quiz',
+			)
+		);
+		update_post_meta( $post_id, '_wes_quiz_import_lang', $lang );
+		wes_import_quiz_language_fields( $post_id, $raw[ $lang ] );
+
+		if ( function_exists( 'pll_set_post_language' ) ) {
+			pll_set_post_language( $post_id, $lang );
+		} else {
+			$report['warnings'][] = sprintf( '%s: Polylang is not active; language was not assigned.', strtoupper( $lang ) );
+		}
+
+		$created[ $lang ] = $post_id;
+		$report['success'][] = sprintf(
+			'%s imported: %d questions, %d profiles. Post ID %d.',
+			strtoupper( $lang ),
+			$validation['questions'],
+			$validation['profiles'],
+			$post_id
+		);
+	}
+
+	if ( count( $created ) >= 2 && function_exists( 'pll_save_post_translations' ) ) {
+		pll_save_post_translations( $created );
+		$report['success'][] = 'Polylang translation relationships were saved.';
+	} elseif ( ! empty( $created ) && ! function_exists( 'pll_save_post_translations' ) ) {
+		$report['warnings'][] = 'Polylang translation relationships could not be saved because Polylang is not active.';
+	}
+
+	if ( ! empty( $created ) && empty( $report['errors'] ) ) {
+		update_option( 'wes_quiz_json_imported', 1, false );
+	}
+
+	set_transient( 'wes_quiz_import_report', $report, MINUTE_IN_SECONDS );
+	wp_safe_redirect( admin_url( 'edit.php?post_type=quiz' ) );
+	exit;
+}
+add_action( 'admin_post_wes_import_quiz_json', 'wes_import_quiz_json' );
