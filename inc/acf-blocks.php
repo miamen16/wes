@@ -117,16 +117,16 @@ add_action( 'acf/init', function () {
 			wes_acf_textarea( 'field_sh_lead', 'Lead', 'lead' ),
 			array( 'key' => 'field_sh_align', 'label' => 'Alignment', 'name' => 'align', 'type' => 'button_group', 'choices' => array( 'left' => 'Left', 'center' => 'Center' ), 'default_value' => 'left' ),
 			array( 'key' => 'field_sh_bg', 'label' => 'Background', 'name' => 'bg', 'type' => 'button_group', 'choices' => array( '' => 'None', 'cream' => 'Cream' ), 'default_value' => '' ),
-			        array(
-            'key'           => 'field_sh_lead',
-            'label'         => 'Lead',
-            'name'          => 'lead',
-            'type'          => 'wysiwyg',
-            'media_upload'  => 0,          // Disable media uploads if not needed
-            'tabs'          => 'visual',   // Only visual tab (no text)
-            'toolbar'       => 'basic',    // Basic toolbar (bold, italic, link, list, etc.)
-            'delay'         => 0,
-        ),
+			array(
+				'key'           => 'field_sh_lead_wysiwyg',
+				'label'         => 'Lead',
+				'name'          => 'lead',
+				'type'          => 'wysiwyg',
+				'media_upload'  => 0,
+				'tabs'          => 'visual',
+				'toolbar'       => 'basic',
+				'delay'         => 0,
+			),
 		),
 		'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-section-heading' ) ) ),
 	) );
@@ -165,8 +165,6 @@ add_action( 'acf/init', function () {
     				wes_acf_text( 'field_card_rest', 'Title (rest)', 'title_rest' ),
     				wes_acf_text( 'field_card_link', 'Link', 'link' ),
     				wes_acf_textarea( 'field_card_back', 'Flip-back text', 'back' ),
-    				
-    				// New: Repeater for related principles with collapsible text
     				array(
     					'key' => 'field_card_related_repeater',
     					'label' => 'Flip-back related principles',
@@ -174,7 +172,7 @@ add_action( 'acf/init', function () {
     					'type' => 'repeater',
     					'layout' => 'block',
     					'button_label' => 'Add Related Principle',
-    					'collapsed' => 'field_related_text', // Makes it collapsible by this field
+    					'collapsed' => 'field_related_text',
     					'sub_fields' => array(
     						array(
     							'key' => 'field_related_number',
@@ -204,8 +202,6 @@ add_action( 'acf/init', function () {
     						),
     					),
     				),
-    				
-    				// Keep old field for backward compatibility (but hide it)
     				array(
     					'key' => 'field_card_related_old',
     					'label' => 'Flip-back related (old format - deprecated)',
@@ -214,7 +210,7 @@ add_action( 'acf/init', function () {
     					'instructions' => 'Deprecated: Use the repeater above instead',
     					'wrapper' => array(
     						'width' => '',
-    						'class' => 'acf-hidden', // Hide this field
+    						'class' => 'acf-hidden',
     						'id' => '',
     					),
     				),
@@ -232,7 +228,7 @@ add_action( 'acf/init', function () {
 				'key' => 'field_tc_items', 'label' => 'Tool cards', 'name' => 'items', 'type' => 'repeater', 'layout' => 'block', 'button_label' => 'Add tool',
 				'sub_fields' => array(
 					array( 'key' => 'field_tc_img', 'label' => 'Illustration', 'name' => 'image', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ),
-						wes_acf_text( 'field_tc_source', 'Source (e.g. UNEP · 2020)', 'source' ),
+					wes_acf_text( 'field_tc_source', 'Source (e.g. UNEP · 2020)', 'source' ),
 					wes_acf_text( 'field_tc_title', 'Title', 'title' ),
 					wes_acf_textarea( 'field_tc_body', 'Body', 'body' ),
 					wes_acf_text( 'field_tc_button', 'Button label', 'button' ),
@@ -417,7 +413,7 @@ add_action( 'acf/init', function () {
     		wes_acf_text( 'field_ch_cta2', 'Button 2 label', 'cta2_label' ),
     		wes_acf_text( 'field_ch_cta2l', 'Button 2 link', 'cta2_link' ),
     	),
-    	'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-custom-hero' ) ) ), // تم الربط مع البلوك الجديد
+    	'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-custom-hero' ) ) ),
     ) );
 
 	acf_add_local_field_group( array(
@@ -442,72 +438,68 @@ add_action( 'acf/init', function () {
 		'title'    => 'Info Card',
 		'fields'   => array(
 			wes_acf_text( 'field_ic_heading', 'Heading', 'heading' ),
-					array(
-			'key'           => 'field_ic_text',
-			'label'         => 'Text',
-			'name'          => 'text',
-			'type'          => 'wysiwyg',
-			'default_value' => '',
-			'toolbar'       => 'basic', // or 'full' for more options
-			'media_upload'  => 1,       // Enable media upload
-			'delay'         => 1,       // Delay loading for performance
-			'tabs'          => 'visual,text', // Show both Visual and Text tabs
-		),
+			array(
+				'key'           => 'field_ic_text',
+				'label'         => 'Text',
+				'name'          => 'text',
+				'type'          => 'wysiwyg',
+				'default_value' => '',
+				'toolbar'       => 'basic',
+				'media_upload'  => 1,
+				'delay'         => 1,
+				'tabs'          => 'visual,text',
+			),
 			wes_acf_image( 'field_ic_image', 'Image', 'image' ),
 			wes_acf_text( 'field_ic_alt', 'Image alt text (SEO)', 'alt' ),
 			array( 'key' => 'field_ic_color', 'label' => 'Colour', 'name' => 'color', 'type' => 'select', 'choices' => array( 'teal' => 'Light teal', 'cream' => 'Cream', 'green' => 'Light green' ), 'default_value' => 'teal' ),
-			array( 
-	'key'           => 'field_ic_color', 
-	'label'         => 'Background Colour', 
-	'name'          => 'color', 
-	'type'          => 'color_picker', 
-	'default_value' => '#008080'
-),
+			array(
+				'key'           => 'field_ic_color_picker',
+				'label'         => 'Background Colour',
+				'name'          => 'color',
+				'type'          => 'color_picker',
+				'default_value' => '#008080'
+			),
 		),
 		'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-info-card' ) ) ),
 	) );
 
     acf_add_local_field_group( array(
-    		'key'      => 'group_block_related',
-    		'title'    => 'Related Links',
-    		'fields'   => array(
-    			wes_acf_text( 'field_rl_heading', 'Heading', 'heading' ),
-    			wes_acf_text( 'field_rl_subtitle', 'Subtitle', 'subtitle' ),
-    			array( 'key' => 'field_rl_bg', 'label' => 'Background', 'name' => 'bg', 'type' => 'select', 'choices' => array( 'none' => 'None', 'cream' => 'Cream' ), 'default_value' => 'none' ),
-    			array(
-    				'key' => 'field_rl_items', 'label' => 'Links', 'name' => 'items', 'type' => 'repeater', 'layout' => 'block', 'button_label' => 'Add link',
-    				'sub_fields' => array(
-    					wes_acf_text( 'field_rl_cat', 'Category label', 'category' ),
-    					wes_acf_text( 'field_rl_title', 'Title', 'title' ),
-    					wes_acf_text( 'field_rl_link', 'Link', 'link' ),
-    					
-    					// 1. التعديل: حقل لرفع أو اختيار ملف الـ SVG من الميديا
-    					array(
-    						'key'           => 'field_rl_custom_svg',
-    						'label'         => 'Upload SVG Icon',
-    						'name'          => 'custom_svg',
-    						'type'          => 'image',
-    						'return_format' => 'id', // مهم جداً يرجع الـ ID عشان نسحب الكود النظيف
-    						'preview_size'  => 'thumbnail',
-    					),
-    
-    					// 2. حقل التحكم في الحجم (زي ما هو)
-    					array(
-    						'key'           => 'field_rl_icon_size',
-    						'label'         => 'Icon Size (px)',
-    						'name'          => 'icon_size',
-    						'type'          => 'number',
-    						'default_value' => 30,
-    						'min'           => 10,
-    						'max'           => 60,
-    					),
+    	'key'      => 'group_block_related',
+    	'title'    => 'Related Links',
+    	'fields'   => array(
+    		wes_acf_text( 'field_rl_heading', 'Heading', 'heading' ),
+    		wes_acf_text( 'field_rl_subtitle', 'Subtitle', 'subtitle' ),
+    		array( 'key' => 'field_rl_bg', 'label' => 'Background', 'name' => 'bg', 'type' => 'select', 'choices' => array( 'none' => 'None', 'cream' => 'Cream' ), 'default_value' => 'none' ),
+    		array(
+    			'key' => 'field_rl_items', 'label' => 'Links', 'name' => 'items', 'type' => 'repeater', 'layout' => 'block', 'button_label' => 'Add link',
+    			'sub_fields' => array(
+    				wes_acf_text( 'field_rl_cat', 'Category label', 'category' ),
+    				wes_acf_text( 'field_rl_title', 'Title', 'title' ),
+    				wes_acf_text( 'field_rl_link', 'Link', 'link' ),
+    				array(
+    					'key'           => 'field_rl_custom_svg',
+    					'label'         => 'Upload SVG Icon',
+    					'name'          => 'custom_svg',
+    					'type'          => 'image',
+    					'return_format' => 'id',
+    					'preview_size'  => 'thumbnail',
+    				),
+    				array(
+    					'key'           => 'field_rl_icon_size',
+    					'label'         => 'Icon Size (px)',
+    					'name'          => 'icon_size',
+    					'type'          => 'number',
+    					'default_value' => 30,
+    					'min'           => 10,
+    					'max'           => 60,
     				),
     			),
     		),
-    		'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-related-links' ) ) ),
+    	),
+    	'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-related-links' ) ) ),
     	) );
-    	/////////////////
-    	acf_add_local_field_group( array(
+
+    acf_add_local_field_group( array(
             'key'      => 'group_block_related_cpt',
             'title'    => 'Related CPT',
             'fields'   => array(
@@ -521,9 +513,6 @@ add_action( 'acf/init', function () {
                     'choices'       => array( 'none' => 'None', 'cream' => 'Cream' ), 
                     'default_value' => 'none' 
                 ),
-                // -----------------------------------------
-                // 🔥 Target Post Type Slug (Select2)
-                // -----------------------------------------
                 array(
                     'key'           => 'field_rcpt_target_post_types',
                     'label'         => 'Target Post Types',
@@ -539,9 +528,9 @@ add_action( 'acf/init', function () {
                         'page'          => 'Pages',
                     ),
                     'multiple'      => 1,
-                    'ui'            => 1,               // Select2
-                    'ajax'          => 0,               // لا نحتاج AJAX لأن الخيارات محدودة
-                    'return_format' => 'value',         // نريد القيم (slugs) كمصفوفة
+                    'ui'            => 1,
+                    'ajax'          => 0,
+                    'return_format' => 'value',
                     'default_value' => array( 'howto', 'checklist', 'explainer' ),
                     'instructions'  => 'Select one or more post types to pull from. Order here affects the "Custom Post Type Input Order" option.',
                 ),
@@ -554,7 +543,6 @@ add_action( 'acf/init', function () {
                     'min'           => 1,
                     'max'           => 20,
                 ),
-                // حقل اختيار طريقة الترتيب
                 array(
                     'key'     => 'field_rb_orderby',
                     'label'   => 'Order By',
@@ -568,9 +556,6 @@ add_action( 'acf/init', function () {
                     ),
                     'default_value' => 'date_desc',
                 ),
-                // -----------------------------------------
-                // 🔥 Select2: Specific Posts to Include
-                // -----------------------------------------
                 array(
                     'key'           => 'field_rcpt_include_posts',
                     'label'         => 'Specific Posts to Include',
@@ -584,9 +569,6 @@ add_action( 'acf/init', function () {
                     'return_format' => 'id',
                     'instructions'  => 'Select specific posts to include (overrides the query). Leave empty to show all matching posts.',
                 ),
-                // -----------------------------------------
-                // 🔥 Select2: Specific Posts to Exclude
-                // -----------------------------------------
                 array(
                     'key'           => 'field_rcpt_exclude_posts',
                     'label'         => 'Specific Posts to Exclude',
@@ -611,7 +593,6 @@ add_action( 'acf/init', function () {
                 ) 
             ),
         ) );
-    	/////////////////
 
 	acf_add_local_field_group( array(
 		'key'      => 'group_block_callout',
@@ -623,15 +604,15 @@ add_action( 'acf/init', function () {
 				'label'         => 'Custom Quote Icon (PNG)',
 				'name'          => 'custom_quote_img',
 				'type'          => 'image',
-				'return_format' => 'url', // عشان يرجع رابط الصورة علطول لملف العرض
+				'return_format' => 'url',
 				'preview_size'  => 'thumbnail',
 			),
 			array( 
             	'key'           => 'field_co_color', 
             	'label'         => 'Custom Background Colour', 
             	'name'          => 'color', 
-            	'type'          => 'color_picker', // التعديل: قلبنا النوع لـ Color Picker
-            	'default_value' => '#008080'      // القيمة الافتراضية كود لون الـ Teal
+            	'type'          => 'color_picker', 
+            	'default_value' => '#008080'
             ),
 		),
 		'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-callout' ) ) ),
@@ -676,17 +657,14 @@ add_action( 'acf/init', function () {
 						wes_acf_text( 'field_pr_title', 'Title', 'title' ),
 						wes_acf_text( 'field_pr_tags', 'Tag keywords (· separated)', 'tags' ),
 						wes_acf_text( 'field_pr_color', 'Badge colour (teal|gold|orange|green)', 'color' ),
-						
-						// حقل الصورة الجديد اللي ضفناه هنا
 						array(
 							'key'           => 'field_pr_image',
 							'label'         => 'Panel Image',
 							'name'          => 'image',
 							'type'          => 'image',
-							'return_format' => 'url', // عشان يرجع الـ URL مباشرة زي ما استقبلناه في كود الـ PHP
+							'return_format' => 'url',
 							'preview_size'  => 'medium',
 						),
-
 						wes_acf_textarea( 'field_pr_intro', 'Intro paragraph', 'intro', 3 ),
 						wes_acf_textarea( 'field_pr_do', 'What to do (one per line)', 'do' ),
 						wes_acf_textarea( 'field_pr_avoid', 'What to avoid (one per line)', 'avoid' ),
@@ -726,8 +704,7 @@ add_action( 'acf/init', function () {
 			'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-resource-cards' ) ) ),
 		) );
 	
-		
-				acf_add_local_field_group( array(
+		acf_add_local_field_group( array(
         	'key'      => 'group_block_resource_cards_dynamic',
         	'title'    => 'Resource Cards Dynamic Settings',
         	'fields'   => array(
@@ -737,11 +714,11 @@ add_action( 'acf/init', function () {
             		'name'          => 'resource_source',
             		'type'          => 'true_false',
             		'ui'            => 1,
-            		'ui_on_text'    => 'Featured Only',
-            		'ui_off_text'   => 'All Resources',
-            		'default_value' => 0,
-            		'instructions'  => 'Show featured resources only, or all resources.',
-            	),
+            			'ui_on_text'    => 'Featured Only',
+        			'ui_off_text'   => 'All Resources',
+        			'default_value' => 0,
+        			'instructions'  => 'Show featured resources only, or all resources.',
+        	),
         		array(
         			'key'           => 'field_rc_dyn_posts_per_page',
         			'label'         => 'Posts Per Page',
@@ -812,7 +789,7 @@ add_action( 'acf/init', function () {
         			array(
         				'param'    => 'block',
         				'operator' => '==',
-        				'value'    => 'acf/wes-resource-cards-dynamic', // ✅ الاسم الصحيح مع البادئة wes-
+        				'value'    => 'acf/wes-resource-cards-dynamic',
         			),
         		),
         	),
@@ -823,7 +800,6 @@ add_action( 'acf/init', function () {
         	'instruction_placement' => 'label',
         	'active'      => true,
         ) );
-		
 
 		acf_add_local_field_group( array(
 			'key'      => 'group_block_featured_resource',
@@ -845,7 +821,6 @@ add_action( 'acf/init', function () {
             'key'      => 'group_block_featured_cpt',
             'title'    => 'Featured CPT Settings',
             'fields'   => array(
-                // Post selector
                 array(
                     'key'           => 'field_featured_select_post',
                     'label'         => 'Select Resource Card',
@@ -857,7 +832,6 @@ add_action( 'acf/init', function () {
                     'allow_null'    => 0,
                     'instructions'  => 'Choose a resource card to feature.',
                 ),
-                // Override eyebrow (optional)
                 array(
                     'key'           => 'field_featured_eyebrow',
                     'label'         => 'Eyebrow Text (Optional)',
@@ -914,12 +888,10 @@ add_action( 'acf/init', function () {
 			'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-begin-cards' ) ) ),
 		) );
 		
-		
-        acf_add_local_field_group( array(
+		acf_add_local_field_group( array(
             'key'      => 'group_block_begin_cards_new',
             'title'    => 'Begin Cards New Settings',
             'fields'   => array(
-                // Card 1
                 array(
                     'key'           => 'field_bcn_select_post_1',
                     'label'         => 'Select Resource Card 1',
@@ -931,7 +903,6 @@ add_action( 'acf/init', function () {
                     'allow_null'    => 1,
                     'instructions'  => 'Choose the first resource card.',
                 ),
-                // Card 2
                 array(
                     'key'           => 'field_bcn_select_post_2',
                     'label'         => 'Select Resource Card 2',
@@ -943,7 +914,6 @@ add_action( 'acf/init', function () {
                     'allow_null'    => 1,
                     'instructions'  => 'Choose the second resource card (optional).',
                 ),
-                // Card 3
                 array(
                     'key'           => 'field_bcn_select_post_3',
                     'label'         => 'Select Resource Card 3',
@@ -955,7 +925,6 @@ add_action( 'acf/init', function () {
                     'allow_null'    => 1,
                     'instructions'  => 'Choose the third resource card (optional).',
                 ),
-                // Background Color
                 array(
                     'key'           => 'field_bcn_bg_color',
                     'label'         => 'Background Color',
@@ -964,7 +933,6 @@ add_action( 'acf/init', function () {
                     'default_value' => '#ffffff',
                     'instructions'  => 'Select a background color for the cards section.',
                 ),
-                // CTA (optional, same as original Begin Cards)
                 array(
                     'key'           => 'field_bcn_cta',
                     'label'         => 'CTA Button Text',
@@ -1001,7 +969,6 @@ add_action( 'acf/init', function () {
             'key'      => 'group_block_card1',
             'title'    => 'Card 1 Settings',
             'fields'   => array(
-                // Post selector
                 array(
                     'key'           => 'field_card1_select_post',
                     'label'         => 'Select Resource Card',
@@ -1030,7 +997,6 @@ add_action( 'acf/init', function () {
             'instruction_placement' => 'label',
             'active'      => true,
         ) );
-		
 
 		acf_add_local_field_group( array(
 			'key'      => 'group_block_resource_library',
@@ -1074,7 +1040,6 @@ add_action( 'acf/init', function () {
 						wes_acf_text( 'field_ag_ccat', 'Category label', 'cat' ),
 						wes_acf_text( 'field_ag_ctitle', 'Title', 'title' ),
 						wes_acf_textarea( 'field_ag_ctext', 'Description', 'text', 3 ),
-						
 						array(
                 			'key' => 'field_ag_clink',
                 			'label' => 'Link',
@@ -1092,24 +1057,23 @@ add_action( 'acf/init', function () {
 			'key'      => 'group_block_audience_guide_cpt',
 			'title'    => 'Audience Quick Guide',
 			'fields'   => array(
-				wes_acf_text( 'field_ag_heading', 'Heading', 'heading' ),
-				wes_acf_textarea( 'field_ag_lead', 'Lead', 'lead', 2 ),
+				wes_acf_text( 'field_ag_cpt_heading', 'Heading', 'heading' ),
+				wes_acf_textarea( 'field_ag_cpt_lead', 'Lead', 'lead', 2 ),
 				array(
-					'key' => 'field_ag_tabs', 'label' => 'Tabs', 'name' => 'tabs', 'type' => 'repeater', 'layout' => 'table', 'button_label' => 'Add tab',
+					'key' => 'field_ag_cpt_tabs', 'label' => 'Tabs', 'name' => 'tabs', 'type' => 'repeater', 'layout' => 'table', 'button_label' => 'Add tab',
 					'sub_fields' => array(
-						wes_acf_text( 'field_ag_tlabel', 'Tab label', 'label' ),
+						wes_acf_text( 'field_ag_cpt_tlabel', 'Tab label', 'label' ),
 					),
 				),
 				array(
-					'key' => 'field_ag_cards', 'label' => 'Cards', 'name' => 'cards', 'type' => 'repeater', 'layout' => 'block', 'button_label' => 'Add card','collapsed' => 'field_ag_ctitle',
+					'key' => 'field_ag_cpt_cards', 'label' => 'Cards', 'name' => 'cards', 'type' => 'repeater', 'layout' => 'block', 'button_label' => 'Add card','collapsed' => 'field_ag_cpt_ctitle',
 					'sub_fields' => array(
-						array( 'key' => 'field_ag_ctab', 'label' => 'Tab index (0-based)', 'name' => 'tab', 'type' => 'number', 'default_value' => 0 ),
-						wes_acf_text( 'field_ag_ccat', 'Category label', 'cat' ),
-						wes_acf_text( 'field_ag_ctitle', 'Title', 'title' ),
-						wes_acf_textarea( 'field_ag_ctext', 'Description', 'text', 3 ),
-						
+						array( 'key' => 'field_ag_cpt_ctab', 'label' => 'Tab index (0-based)', 'name' => 'tab', 'type' => 'number', 'default_value' => 0 ),
+						wes_acf_text( 'field_ag_cpt_ccat', 'Category label', 'cat' ),
+						wes_acf_text( 'field_ag_cpt_ctitle', 'Title', 'title' ),
+						wes_acf_textarea( 'field_ag_cpt_ctext', 'Description', 'text', 3 ),
 						array(
-                			'key' => 'field_ag_clink',
+                			'key' => 'field_ag_cpt_clink',
                 			'label' => 'Link',
                 			'name' => 'link',
                 			'type' => 'link',
@@ -1121,7 +1085,6 @@ add_action( 'acf/init', function () {
 			'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-audience-guide-cpt' ) ) ),
 		) );
 		
-
 
 		acf_add_local_field_group( array(
 			'key'      => 'group_block_theme_index',
@@ -1140,15 +1103,12 @@ add_action( 'acf/init', function () {
 			'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-theme-index' ) ) ),
 		) );
 		
-		
         acf_add_local_field_group( array(
         	'key'      => 'group_block_browse_taxonomy',
         	'title'    => 'Browse by Taxonomy',
         	'fields'   => array(
         		wes_acf_text( 'field_bt_heading', 'Heading', 'heading' ),
         		wes_acf_textarea( 'field_bt_lead', 'Lead', 'lead', 2 ),
-        		
-        		// حقل اختيار الـ Taxonomy
         		array(
         			'key'           => 'field_bt_target_taxonomy',
         			'label'         => 'Target Taxonomy',
@@ -1163,8 +1123,6 @@ add_action( 'acf/init', function () {
         			'multiple'      => 0,
         			'ui'            => 1,
         		),
-        		
-        		// حقل اختيار الـ CPT المقترن بها
         		array(
         			'key'           => 'field_bt_target_post_type',
         			'label'         => 'Target Post Type',
@@ -1194,7 +1152,6 @@ add_action( 'acf/init', function () {
                 	),
                 	'default_value' => 'name',
                 ),
-                
                 array(
                 	'key' => 'field_order_posts',
                 	'label' => 'Resource Order',
@@ -1208,7 +1165,6 @@ add_action( 'acf/init', function () {
                 	),
                 	'default_value' => 'title',
                 ),
-                
                 array(
                 	'key' => 'field_post_order_dir',
                 	'label' => 'Order Direction',
@@ -1221,10 +1177,7 @@ add_action( 'acf/init', function () {
                 	'default_value' => 'ASC',
                 ),
         	),
-        	// الـ Value هنا اتغيرت لـ اسم البلوك الجديد
         	'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-browse-taxonomy' ) ) ),
         ) );
-        
-        
         
 } );
