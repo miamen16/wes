@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once get_template_directory() . '/inc/quiz-cpt.php';
+require_once get_template_directory() . '/inc/quiz-block.php';
 
 function wes_quiz_link( $link, $lang ) {
 	if ( ! is_string( $link ) || $link === '' || $link[0] !== '/' ) {
@@ -123,8 +124,44 @@ function wes_quiz_cpt_data( $post_id, $lang = 'en' ) {
 	);
 }
 
-function wes_quiz_data( $lang = 'en' ) {
-	$lang = in_array( $lang, array( 'en', 'ar', 'fr' ), true ) ? $lang : 'en';
+/**
+ * Get quiz data for a language, optionally starting from a specific Quiz post.
+ *
+ * When Polylang is active, the selected post is resolved to its translation in
+ * the requested language before its ACF fields are read.
+ *
+ * @param string $lang    Language slug.
+ * @param int    $quiz_id Selected Quiz post ID.
+ * @return array|null
+ */
+function wes_quiz_data( $lang = 'en', $quiz_id = 0 ) {
+	$lang    = in_array( $lang, array( 'en', 'ar', 'fr' ), true ) ? $lang : 'en';
+	$quiz_id = absint( $quiz_id );
+
+	if ( $quiz_id && 'quiz' === get_post_type( $quiz_id ) ) {
+		if ( function_exists( 'pll_get_post' ) ) {
+			$translated_id = (int) pll_get_post( $quiz_id, $lang );
+			if ( $translated_id ) {
+				$quiz_id = $translated_id;
+			}
+		}
+
+		$data = wes_quiz_cpt_data( $quiz_id, $lang );
+		if ( ! empty( $data['questions'] ) && ! empty( $data['profiles'] ) ) {
+			foreach ( $data['questions'] as $qi => &$question ) {
+				$question['help'] = ! empty( $question['multi'] ) ? ( $data['ui']['multi'] ?? '' ) : ( $data['ui']['single'] ?? '' );
+				foreach ( $question['options'] as $oi => &$option ) {
+					$option['w'] = wes_quiz_weight( $qi, $oi );
+				}
+				unset( $option );
+			}
+			unset( $question );
+			return $data;
+		}
+	}
+
+	// Backward compatibility for existing Quiz blocks that have not selected a post yet.
+	// Once every block has a Quiz selected, this query can be removed safely.
 	$query_args = array(
 		'post_type'      => 'quiz',
 		'post_status'    => 'publish',
