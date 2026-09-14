@@ -1,0 +1,69 @@
+name: Fix ACF duplicate keys
+
+on:
+  push:
+    branches:
+      - fix/acf-duplicate-keys
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fix duplicate ACF field keys
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path('inc/acf-blocks.php')
+          text = path.read_text(encoding='utf-8')
+
+          # 1. Section Heading: keep the existing field name, change only the duplicate key.
+          old = "'key'           => 'field_sh_lead'"
+          assert text.count(old) == 1, f'Expected exactly one WYSIWYG field_sh_lead key, found {text.count(old)}'
+          text = text.replace(old, "'key'           => 'field_sh_lead_wysiwyg'", 1)
+
+          # 2. Info Card: change only the second/colour-picker key.
+          old = "'key' => 'field_ic_color'"
+          count = text.count(old)
+          assert count == 2, f'Expected exactly two field_ic_color keys, found {count}'
+          first = text.find(old)
+          second = text.find(old, first + 1)
+          text = text[:second] + text[second:].replace(old, "'key' => 'field_ic_color_picker'", 1)
+
+          # 3. Audience Quick Guide CPT: preserve all field names, but namespace its keys.
+          marker = "'key'      => 'group_block_audience_guide_cpt'"
+          start = text.find(marker)
+          assert start != -1, 'Audience CPT field group not found'
+          next_group = text.find("\n\tacf_add_local_field_group( array(", start + len(marker))
+          assert next_group != -1, 'End of Audience CPT field group not found'
+          segment = text[start:next_group]
+          matches = re.findall(r"'key'\s*=>\s*'field_ag_([^']+)'", segment)
+          assert matches, 'No field_ag_* keys found inside Audience CPT group'
+          assert len(matches) == len(set(matches)), 'Unexpected duplicate keys already present inside Audience CPT group'
+          segment = re.sub(r"('key'\s*=>\s*')field_ag_([^']+)(')", r"\1field_ag_cpt_\2\3", segment)
+          text = text[:start] + segment + text[next_group:]
+
+          # Verify all ACF field keys are globally unique.
+          keys = re.findall(r"['\"]key['\"]\s*=>\s*['\"]([^'\"]+)['\"]", text)
+          duplicates = sorted({k for k in keys if keys.count(k) > 1})
+          assert not duplicates, f'Duplicate ACF keys remain: {duplicates}'
+
+          path.write_text(text, encoding='utf-8')
+
+      - name: Validate PHP syntax
+        run: php -l inc/acf-blocks.php
+
+      - name: Commit changes and remove temporary workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add inc/acf-blocks.php
+          git rm .github/workflows/fix-acf-duplicate-keys.yml
+          git commit -m "Fix duplicate ACF field keys"
+          git push origin HEAD:fix/acf-duplicate-keys
