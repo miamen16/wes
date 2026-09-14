@@ -1,7 +1,7 @@
 /* WES interactive quiz engine.
    Reads JSON from .quiz-app[data-quiz]: { intro, ui, questions[{multi,text,help,options[{text,feedback,w}]}],
-   profiles[{key,title,lead,body,image,groups[{heading,items[{cat,title,link}]}]}] }.
-   Flow: start -> 5 questions (single/multi + per-answer feedback) -> weighted profile result. */
+   profiles[{key,title,lead,body,image,groups[{heading,items[{cat,title,link}]}]}].
+   Flow: start -> questions (single/multi + per-answer feedback) -> weighted profile result. */
 (function () {
 	'use strict';
 
@@ -12,7 +12,7 @@
 		return e;
 	}
 	function esc( s ) {
-		return String( s == null ? '' : s ).replace( /[&<>"]/g, function ( c ) {
+		return String( s == null ? '' : s ).replace( /[&<>\"]/g, function ( c ) {
 			return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ c ];
 		} );
 	}
@@ -21,6 +21,9 @@
 	function initQuiz( root ) {
 		var data;
 		try { data = JSON.parse( root.getAttribute( 'data-quiz' ) ); } catch ( e ) { return; }
+		if ( ! data || ! Array.isArray( data.questions ) || ! data.questions.length || ! Array.isArray( data.profiles ) || ! data.profiles.length ) {
+			return;
+		}
 		var ui = data.ui || {};
 		var answers;
 
@@ -48,7 +51,7 @@
 			t.appendChild( el( 'h2', 'quizc__title', esc( data.intro.title ) ) );
 			if ( data.intro.lead ) { t.appendChild( el( 'p', 'quizc__intro', esc( data.intro.lead ) ) ); }
 			if ( data.intro.note ) { t.appendChild( el( 'p', 'quizc__note', esc( data.intro.note ) ) ); }
-			var b = el( 'button', 'btn btn--orange', esc( data.intro.start || 'Start' ) +  '<i class="fa-solid fa-angle-right"></i>' );
+			var b = el( 'button', 'btn btn--orange', esc( data.intro.start || 'Start' ) + '<i class="fa-solid fa-angle-right"></i>' );
 			b.addEventListener( 'click', function () { question( 0 ); } );
 			t.appendChild( b );
 			card.appendChild( t );
@@ -57,84 +60,77 @@
 		}
 
 		function question( qi ) {
-        	var q = data.questions[ qi ];
-        	var card = el( 'div', 'quizc__card quizc__card--q' );
-        	var left = el( 'div', 'quizc__pad quizc__q-left' );
-        
-        	// ---- 🖼️ Add the SAME intro image at the top of every question ----
-        	if ( data.intro.image ) {
-        		var img = imgEl( data.intro.image, data.intro.alt || '' );
-        		img.className = 'quizc__q-img'; // add a class for optional styling
-        		left.appendChild( img );
-        	}
-        
-        	// ---- Progress ----
-        	var prog = ( ui.progress || '{n} / {total}' ).replace( '{n}', qi + 1 ).replace( '{total}', data.questions.length );
-        	var progressWrap = el( 'div', 'quizc__q-progress-wrap' );
-        	progressWrap.appendChild( el( 'p', 'quizc__progress', esc( prog ) ) );
-        	left.appendChild( progressWrap );
-        
-        	// ---- Question text & help ----
-        	var textWrap = el( 'div', 'quizc__q-text-wrap' );
-        	textWrap.appendChild( el( 'h2', 'quizc__q-prompt', esc( q.text ) ) );
-        	if ( q.help ) {
-        		textWrap.appendChild( el( 'p', 'quizc__q-help', esc( q.help ) ) );
-        	}
-        	left.appendChild( textWrap );
-        
-        	// ---- Right column (options) ----
-        	var right = el( 'div', 'quizc__pad quizc__q-right' );
-        	var btns = [], fbs = [];
-        	var radioCls = q.multi ? 'quizc__radio quizc__radio--multi' : 'quizc__radio';
-        
-        	function refresh() {
-        		q.options.forEach( function ( opt, oi ) {
-        			var sel = answers[ qi ].indexOf( oi ) > -1;
-        			btns[ oi ].classList.toggle( 'is-selected', sel );
-        			if ( fbs[ oi ] ) { fbs[ oi ].hidden = ! sel; }
-        		} );
-        	}
-        
-        	q.options.forEach( function ( opt, oi ) {
-        		var btn = el( 'button', 'quizc__opt',
-        			'<span class="' + radioCls + '"></span><span class="quizc__opt-label">' + esc( opt.text ) + '</span>' );
-        		var feedbackHtml = '<img src="/wp-content/themes/wes/assets/img/sms.svg" class="quizc__fb-icon" alt="feedback icon" /> ' + esc( opt.feedback );
-        		var fb = opt.feedback ? el( 'p', 'quizc__feedback', feedbackHtml ) : null;
-        		if ( fb ) { fb.hidden = true; }
-        		btn.addEventListener( 'click', function () {
-        			if ( q.multi ) {
-        				var idx = answers[ qi ].indexOf( oi );
-        				if ( idx > -1 ) { answers[ qi ].splice( idx, 1 ); } else { answers[ qi ].push( oi ); }
-        			} else {
-        				answers[ qi ] = [ oi ];
-        			}
-        			refresh();
-        		} );
-        		btns[ oi ] = btn; fbs[ oi ] = fb;
-        		right.appendChild( btn );
-        		if ( fb ) { right.appendChild( fb ); }
-        	} );
-        	refresh();
-        
-        	card.appendChild( left );
-        	card.appendChild( right );
-        
-        	// ---- Navigation ----
-        	var nav = el( 'div', 'quizc__nav' );
-        	if ( qi > 0 ) {
-        		var back = el( 'button', 'btn btn--ghost', ' <i class="fa-solid fa-angle-left"></i> ' + esc( ui.back || 'Back' ) );
-        		back.addEventListener( 'click', function () { question( qi - 1 ); root.scrollIntoView( { behavior: 'smooth', block: 'start' } ); } );
-        		nav.appendChild( back );
-        	}
-        	var last = qi + 1 >= data.questions.length;
-        	var next = el( 'button', 'btn btn--orange', esc( last ? ( ui.results || 'See my results' ) : ( ui.next || 'Next' ) ) + ' <i class="fa-solid fa-angle-right"></i>' );
-        	next.addEventListener( 'click', function () {
-        		if ( last ) { result(); } else { question( qi + 1 ); }
-        		root.scrollIntoView( { behavior: 'smooth', block: 'start' } );
-        	} );
-        	nav.appendChild( next );
-        	render( shell( 'q', card, nav ) );
-        }
+			var q = data.questions[ qi ];
+			if ( ! q ) { return; }
+			var card = el( 'div', 'quizc__card quizc__card--q' );
+			var left = el( 'div', 'quizc__pad quizc__q-left' );
+
+			if ( data.intro.image ) {
+				var img = imgEl( data.intro.image, data.intro.alt || '' );
+				img.className = 'quizc__q-img';
+				left.appendChild( img );
+			}
+
+			var prog = ( ui.progress || '{n} / {total}' ).replace( '{n}', qi + 1 ).replace( '{total}', data.questions.length );
+			var progressWrap = el( 'div', 'quizc__q-progress-wrap' );
+			progressWrap.appendChild( el( 'p', 'quizc__progress', esc( prog ) ) );
+			left.appendChild( progressWrap );
+
+			var textWrap = el( 'div', 'quizc__q-text-wrap' );
+			textWrap.appendChild( el( 'h2', 'quizc__q-prompt', esc( q.text ) ) );
+			if ( q.help ) { textWrap.appendChild( el( 'p', 'quizc__q-help', esc( q.help ) ) ); }
+			left.appendChild( textWrap );
+
+			var right = el( 'div', 'quizc__pad quizc__q-right' );
+			var btns = [], fbs = [];
+			var radioCls = q.multi ? 'quizc__radio quizc__radio--multi' : 'quizc__radio';
+
+			function refresh() {
+				q.options.forEach( function ( opt, oi ) {
+					var sel = answers[ qi ].indexOf( oi ) > -1;
+					btns[ oi ].classList.toggle( 'is-selected', sel );
+					if ( fbs[ oi ] ) { fbs[ oi ].hidden = ! sel; }
+				} );
+			}
+
+			( q.options || [] ).forEach( function ( opt, oi ) {
+				var btn = el( 'button', 'quizc__opt', '<span class="' + radioCls + '"></span><span class="quizc__opt-label">' + esc( opt.text ) + '</span>' );
+				var feedbackHtml = '<img src="/wp-content/themes/wes/assets/img/sms.svg" class="quizc__fb-icon" alt="feedback icon" /> ' + esc( opt.feedback );
+				var fb = opt.feedback ? el( 'p', 'quizc__feedback', feedbackHtml ) : null;
+				if ( fb ) { fb.hidden = true; }
+				btn.addEventListener( 'click', function () {
+					if ( q.multi ) {
+						var idx = answers[ qi ].indexOf( oi );
+						if ( idx > -1 ) { answers[ qi ].splice( idx, 1 ); } else { answers[ qi ].push( oi ); }
+					} else {
+						answers[ qi ] = [ oi ];
+					}
+					refresh();
+				} );
+				btns[ oi ] = btn; fbs[ oi ] = fb;
+				right.appendChild( btn );
+				if ( fb ) { right.appendChild( fb ); }
+			} );
+			refresh();
+
+			card.appendChild( left );
+			card.appendChild( right );
+
+			var nav = el( 'div', 'quizc__nav' );
+			if ( qi > 0 ) {
+				var back = el( 'button', 'btn btn--ghost', ' <i class="fa-solid fa-angle-left"></i> ' + esc( ui.back || 'Back' ) );
+				back.addEventListener( 'click', function () { question( qi - 1 ); root.scrollIntoView( { behavior: 'smooth', block: 'start' } ); } );
+				nav.appendChild( back );
+			}
+			var last = qi + 1 >= data.questions.length;
+			var next = el( 'button', 'btn btn--orange', esc( last ? ( ui.results || 'See my results' ) : ( ui.next || 'Next' ) ) + ' <i class="fa-solid fa-angle-right"></i>' );
+			next.addEventListener( 'click', function () {
+				if ( last ) { result(); } else { question( qi + 1 ); }
+				root.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+			} );
+			nav.appendChild( next );
+			render( shell( 'q', card, nav ) );
+		}
 
 		function pickProfile() {
 			var score = { A: 0, B: 0, C: 0 };
@@ -172,11 +168,10 @@
 				var c = el( 'div', 'quizc__col' );
 				c.appendChild( el( 'h3', 'quizc__col-head', esc( g.heading ) ) );
 				( g.items || [] ).forEach( function ( it ) {
-					var a = el( 'a', 'quizc__res-item',
-						'<span class="quizc__res-title">' + esc( it.title ) + '</span><span class="quizc__res-cat">' + esc( it.cat ) + '</span>' );
+					var a = el( 'a', 'quizc__res-item', '<span class="quizc__res-title">' + esc( it.title ) + '</span><span class="quizc__res-cat">' + esc( it.cat ) + '</span>' );
 					a.href = it.link || '#';
 					a.target = '_blank';
-                    a.rel = 'noopener noreferrer';
+					a.rel = 'noopener noreferrer';
 					a.insertAdjacentHTML( 'beforeend', EXT );
 					c.appendChild( a );
 				} );
