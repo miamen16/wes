@@ -160,33 +160,6 @@ function wes_quiz_data( $lang = 'en', $quiz_id = 0 ) {
 		}
 	}
 
-	// Backward compatibility for existing Quiz blocks that have not selected a post yet.
-	// Once every block has a Quiz selected, this query can be removed safely.
-	$query_args = array(
-		'post_type'      => 'quiz',
-		'post_status'    => 'publish',
-		'posts_per_page' => 1,
-		'fields'         => 'ids',
-	);
-	if ( function_exists( 'pll_get_post_language' ) ) {
-		$query_args['lang'] = $lang;
-	}
-	$quiz_ids = get_posts( $query_args );
-	if ( ! empty( $quiz_ids ) ) {
-		$data = wes_quiz_cpt_data( (int) $quiz_ids[0], $lang );
-		if ( ! empty( $data['questions'] ) && ! empty( $data['profiles'] ) ) {
-			foreach ( $data['questions'] as $qi => &$question ) {
-				$question['help'] = ! empty( $question['multi'] ) ? ( $data['ui']['multi'] ?? '' ) : ( $data['ui']['single'] ?? '' );
-				foreach ( $question['options'] as $oi => &$option ) {
-					$option['w'] = wes_quiz_weight( $qi, $oi );
-				}
-				unset( $option );
-			}
-			unset( $question );
-			return $data;
-		}
-	}
-
 	// Legacy JSON fallback while the migration is being completed.
 	static $raw = null;
 	if ( null === $raw ) {
