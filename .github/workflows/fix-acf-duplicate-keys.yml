@@ -1,0 +1,79 @@
+name: Fix ACF duplicate keys
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-acf-duplicate-keys.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fix duplicate ACF field keys
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path('inc/acf-blocks.php')
+          text = path.read_text(encoding='utf-8')
+
+          def replace_second(text, token, replacement):
+              positions = [m.start() for m in re.finditer(re.escape(token), text)]
+              if len(positions) != 2:
+                  raise SystemExit(f'Expected exactly 2 occurrences of {token!r}, found {len(positions)}')
+              pos = positions[1]
+              return text[:pos] + replacement + text[pos + len(token):]
+
+          text = replace_second(text, "'field_sh_lead'", "'field_sh_lead_wysiwyg'")
+          text = replace_second(text, "'field_ic_color'", "'field_ic_color_picker'")
+
+          marker = "'key'      => 'group_block_audience_guide_cpt'"
+          start = text.find(marker)
+          if start == -1:
+              raise SystemExit('Audience Quick Guide CPT group not found')
+
+          next_group = text.find("\n\tacf_add_local_field_group( array(", start + len(marker))
+          if next_group == -1:
+              next_group = len(text)
+
+          block = text[start:next_group]
+          block_new = re.sub(r'field_ag_', 'field_ag_cpt_', block)
+          if block_new == block:
+              raise SystemExit('No field_ag_ keys found in CPT group')
+          text = text[:start] + block_new + text[next_group:]
+
+          definition_keys = []
+          definition_keys += re.findall(r"wes_acf_[a-z_]+\(\s*'((?:field|group)_[^']+)'", text)
+          definition_keys += re.findall(r"'key'\s*=>\s*'((?:field|group)_[^']+)'", text)
+          field_keys = [k for k in definition_keys if k.startswith('field_')]
+          duplicates = sorted({k for k in field_keys if field_keys.count(k) > 1})
+          if duplicates:
+              raise SystemExit('Duplicate ACF field keys remain: ' + ', '.join(duplicates))
+
+          path.write_text(text, encoding='utf-8')
+
+      - name: Verify and commit
+        run: |
+          git diff --check
+          git diff -- inc/acf-blocks.php
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add inc/acf-blocks.php
+          git commit -m "Fix duplicate ACF field keys"
+          git push
+
+      - name: Remove temporary workflow
+        if: success()
+        run: |
+          git rm .github/workflows/fix-acf-duplicate-keys.yml
+          git commit -m "Remove temporary ACF key migration workflow"
+          git push
