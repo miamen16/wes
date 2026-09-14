@@ -10,8 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-get_header();
-
 $pt    = get_query_var( 'post_type' );
 $pt    = is_array( $pt ) ? reset( $pt ) : $pt;
 $obj   = $pt ? get_post_type_object( $pt ) : null;
@@ -21,7 +19,6 @@ if ( ! in_array( $lang, array( 'en', 'ar', 'fr' ), true ) ) {
 	$lang = 'en';
 }
 
-// Localised archive titles, descriptions and UI strings (CPT labels aren't translatable).
 $i18n_labels = array(
 	'en' => array( 'explainer' => 'Explainers', 'howto' => 'How-to Guides', 'checklist' => 'Checklists' ),
 	'ar' => array( 'explainer' => 'شروحات', 'howto' => 'أدلة إرشادية', 'checklist' => 'قوائم تحقّق' ),
@@ -51,10 +48,46 @@ $label       = isset( $i18n_labels[ $lang ][ $pt ] ) ? $i18n_labels[ $lang ][ $p
 $descs       = isset( $i18n_descs[ $lang ] ) ? $i18n_descs[ $lang ] : $i18n_descs['en'];
 $all_label   = isset( $i18n_all[ $lang ] ) ? $i18n_all[ $lang ] : 'All';
 $empty_label = isset( $i18n_empty[ $lang ] ) ? $i18n_empty[ $lang ] : $i18n_empty['en'];
-// Only show topic tabs that actually have posts within THIS archive's post type.
-$pt_post_ids = $pt ? get_posts( array( 'post_type' => $pt, 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids' ) ) : array();
-$topics      = $pt_post_ids ? get_terms( array( 'taxonomy' => 'topic', 'hide_empty' => true, 'object_ids' => $pt_post_ids ) ) : array();
-$current     = isset( $_GET['topic'] ) ? sanitize_title( wp_unslash( $_GET['topic'] ) ) : '';
+
+$pt_post_ids = $pt ? get_posts(
+	array(
+		'post_type'     => $pt,
+		'post_status'   => 'publish',
+		'numberposts'   => -1,
+		'fields'        => 'ids',
+		'no_found_rows' => true,
+	)
+) : array();
+$topics = $pt_post_ids ? get_terms(
+	array(
+		'taxonomy'   => 'topic',
+		'hide_empty' => true,
+		'object_ids' => $pt_post_ids,
+	)
+) : array();
+$current = isset( $_GET['topic'] ) ? sanitize_title( wp_unslash( $_GET['topic'] ) ) : '';
+
+// Build the archive query explicitly so the topic filter is applied to the
+// database query instead of merely changing the active tab in the UI.
+$paged      = max( 1, (int) get_query_var( 'paged' ) );
+$query_args = array(
+	'post_type'      => $pt,
+	'post_status'    => 'publish',
+	'posts_per_page' => (int) get_option( 'posts_per_page' ),
+	'paged'          => $paged,
+);
+if ( $current ) {
+	$query_args['tax_query'] = array(
+		array(
+			'taxonomy' => 'topic',
+			'field'    => 'slug',
+			'terms'    => $current,
+		),
+	);
+}
+$archive_query = new WP_Query( $query_args );
+
+get_header();
 ?>
 <section class="archive-hero">
 	<div class="container">
@@ -74,13 +107,10 @@ $current     = isset( $_GET['topic'] ) ? sanitize_title( wp_unslash( $_GET['topi
 			</div>
 		<?php endif; ?>
 
-		<?php if ( have_posts() ) : ?>
+		<?php if ( $archive_query->have_posts() ) : ?>
 			<div class="archive-grid">
-				<?php
-				while ( have_posts() ) :
-					the_post();
-					$terms = get_the_terms( get_the_ID(), 'topic' );
-					?>
+				<?php while ( $archive_query->have_posts() ) : $archive_query->the_post(); ?>
+					<?php $terms = get_the_terms( get_the_ID(), 'topic' ); ?>
 					<article class="acard">
 						<a class="acard__link" href="<?php the_permalink(); ?>">
 							<div class="acard__media">
@@ -100,12 +130,31 @@ $current     = isset( $_GET['topic'] ) ? sanitize_title( wp_unslash( $_GET['topi
 					</article>
 				<?php endwhile; ?>
 			</div>
-			<?php the_posts_pagination( array( 'mid_size' => 2, 'prev_text' => '‹', 'next_text' => '›' ) ); ?>
+
+			<?php
+			$pagination = paginate_links(
+				array(
+					'total'     => max( 1, (int) $archive_query->max_num_pages ),
+					'current'   => $paged,
+					'mid_size'  => 2,
+					'prev_text' => '‹',
+					'next_text' => '›',
+					'add_args'  => $current ? array( 'topic' => $current ) : array(),
+				)
+			);
+			if ( $pagination ) :
+				?>
+				<nav class="navigation pagination" aria-label="<?php esc_attr_e( 'Posts navigation', 'wes' ); ?>">
+					<div class="nav-links"><?php echo wp_kses_post( $pagination ); ?></div>
+				</nav>
+				<?php
+			endif;
+			?>
 		<?php else : ?>
 			<p class="archive-empty"><?php echo esc_html( $empty_label ); ?></p>
 		<?php endif; ?>
+		<?php wp_reset_postdata(); ?>
 	</div>
 </div>
 
-<?php
-get_footer();
+<?php get_footer(); ?>
