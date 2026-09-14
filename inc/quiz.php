@@ -2,10 +2,6 @@
 /**
  * Interactive quiz data layer.
  *
- * Quiz content is stored in the multilingual Quiz CPT/ACF fields. The legacy
- * assets/data/quiz.json remains as a safe fallback while the migration is
- * being completed.
- *
  * @package WES
  */
 
@@ -13,13 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Resolve an EN-form internal link to the current language's permalink.
- *
- * @param string $link Internal or external link.
- * @param string $lang Language slug.
- * @return string
- */
+require_once get_template_directory() . '/inc/quiz-cpt.php';
+
 function wes_quiz_link( $link, $lang ) {
 	if ( ! is_string( $link ) || $link === '' || $link[0] !== '/' ) {
 		return $link;
@@ -34,14 +25,7 @@ function wes_quiz_link( $link, $lang ) {
 			$target = (int) $pg->ID;
 		}
 	} elseif ( count( $parts ) === 2 && isset( $pt_by_archive[ $parts[0] ] ) ) {
-		$f = get_posts(
-			array(
-				'name'        => $parts[1],
-				'post_type'   => $pt_by_archive[ $parts[0] ],
-				'post_status' => 'publish',
-				'numberposts' => 1,
-			)
-		);
+		$f = get_posts( array( 'name' => $parts[1], 'post_type' => $pt_by_archive[ $parts[0] ], 'post_status' => 'publish', 'numberposts' => 1 ) );
 		if ( $f ) {
 			$target = (int) $f[0]->ID;
 		}
@@ -56,15 +40,6 @@ function wes_quiz_link( $link, $lang ) {
 	return ( 'en' === $lang ) ? $link : home_url( '/' . $lang . $link );
 }
 
-/**
- * Profile lean per question/option (index-based; option order is fixed).
- * A = start by understanding, B = ready to act, C = ready to mobilise.
- * Q1/Q2 are observational (no weight); Q5 is decisive (×2).
- *
- * @param int $qi Question index.
- * @param int $oi Option index.
- * @return array
- */
 function wes_quiz_weight( $qi, $oi ) {
 	$lean = array(
 		2 => array( 'B', 'B', 'B', 'A', 'A' ),
@@ -79,18 +54,10 @@ function wes_quiz_weight( $qi, $oi ) {
 	return $w;
 }
 
-/**
- * Build the payload from one Quiz CPT post.
- *
- * @param int    $post_id Quiz post ID.
- * @param string $lang Language slug.
- * @return array|null
- */
 function wes_quiz_cpt_data( $post_id, $lang = 'en' ) {
 	if ( ! $post_id || 'quiz' !== get_post_type( $post_id ) || ! function_exists( 'get_field' ) ) {
 		return null;
 	}
-
 	$questions = array();
 	foreach ( (array) get_field( 'quiz_questions', $post_id ) as $question ) {
 		$options = array();
@@ -106,7 +73,6 @@ function wes_quiz_cpt_data( $post_id, $lang = 'en' ) {
 			'options' => $options,
 		);
 	}
-
 	$profiles = array();
 	foreach ( (array) get_field( 'quiz_profiles', $post_id ) as $profile ) {
 		$groups = array();
@@ -119,10 +85,7 @@ function wes_quiz_cpt_data( $post_id, $lang = 'en' ) {
 					'link'  => wes_quiz_link( (string) ( $item['link'] ?? '' ), $lang ),
 				);
 			}
-			$groups[] = array(
-				'heading' => (string) ( $group['heading'] ?? '' ),
-				'items'   => $items,
-			);
+			$groups[] = array( 'heading' => (string) ( $group['heading'] ?? '' ), 'items' => $items );
 		}
 		$profiles[] = array(
 			'key'    => (string) ( $profile['key'] ?? '' ),
@@ -134,13 +97,7 @@ function wes_quiz_cpt_data( $post_id, $lang = 'en' ) {
 			'alt'    => '',
 		);
 	}
-
-	$rec = array(
-		'en' => 'Recommended resources',
-		'ar' => 'موارد مقترحة',
-		'fr' => 'Ressources recommandées',
-	);
-
+	$rec = array( 'en' => 'Recommended resources', 'ar' => 'موارد مقترحة', 'fr' => 'Ressources recommandées' );
 	return array(
 		'intro' => array(
 			'eyebrow' => (string) get_field( 'quiz_intro_eyebrow', $post_id ),
@@ -166,20 +123,8 @@ function wes_quiz_cpt_data( $post_id, $lang = 'en' ) {
 	);
 }
 
-/**
- * Build the full quiz payload for a language.
- *
- * The current language's Quiz CPT post is preferred. The legacy JSON remains
- * a fallback so the site keeps working before the importer has been run.
- *
- * @param string $lang Language slug.
- * @return array|null
- */
 function wes_quiz_data( $lang = 'en' ) {
 	$lang = in_array( $lang, array( 'en', 'ar', 'fr' ), true ) ? $lang : 'en';
-
-	// Prefer the Quiz CPT for the requested Polylang language.
-	$quiz_id = 0;
 	$query_args = array(
 		'post_type'      => 'quiz',
 		'post_status'    => 'publish',
@@ -191,11 +136,7 @@ function wes_quiz_data( $lang = 'en' ) {
 	}
 	$quiz_ids = get_posts( $query_args );
 	if ( ! empty( $quiz_ids ) ) {
-		$quiz_id = (int) $quiz_ids[0];
-	}
-
-	if ( $quiz_id ) {
-		$data = wes_quiz_cpt_data( $quiz_id, $lang );
+		$data = wes_quiz_cpt_data( (int) $quiz_ids[0], $lang );
 		if ( ! empty( $data['questions'] ) && ! empty( $data['profiles'] ) ) {
 			foreach ( $data['questions'] as $qi => &$question ) {
 				$question['help'] = ! empty( $question['multi'] ) ? ( $data['ui']['multi'] ?? '' ) : ( $data['ui']['single'] ?? '' );
@@ -209,7 +150,7 @@ function wes_quiz_data( $lang = 'en' ) {
 		}
 	}
 
-	// Legacy fallback during migration.
+	// Legacy JSON fallback while the migration is being completed.
 	static $raw = null;
 	if ( null === $raw ) {
 		$file = get_template_directory() . '/assets/data/quiz.json';
