@@ -16,11 +16,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * changes this block's editor mode so Gutenberg does not depend on the
  * server-rendered preview before the required Quiz field has been saved.
  *
- * @param array  $args Block registration arguments.
- * @param string $name Block name.
+ * ACF applies the acf/register_block_type_args filter with the block
+ * arguments array only, so the block name must be read from the arguments.
+ *
+ * @param array $args Block registration arguments.
  * @return array
  */
-function wes_quiz_block_editor_args( $args, $name ) {
+function wes_quiz_block_editor_args( $args ) {
+	$name = isset( $args['name'] ) ? (string) $args['name'] : '';
+
 	if ( ! in_array( $name, array( 'wes-quiz-app', 'acf/wes-quiz-app' ), true ) ) {
 		return $args;
 	}
@@ -29,7 +33,7 @@ function wes_quiz_block_editor_args( $args, $name ) {
 
 	return $args;
 }
-add_filter( 'acf/register_block_type_args', 'wes_quiz_block_editor_args', 20, 2 );
+add_filter( 'acf/register_block_type_args', 'wes_quiz_block_editor_args', 20 );
 
 /**
  * Register the Quiz selector used by the Interactive Quiz block.
