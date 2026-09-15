@@ -10,6 +10,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Keep the Interactive Quiz block in ACF edit mode while configuring it.
+ *
+ * The block is registered centrally in inc/acf-blocks.php. This filter only
+ * changes this block's editor mode so Gutenberg does not depend on the
+ * server-rendered preview before the required Quiz field has been saved.
+ *
+ * @param array  $args Block registration arguments.
+ * @param string $name Block name.
+ * @return array
+ */
+function wes_quiz_block_editor_args( $args, $name ) {
+	if ( ! in_array( $name, array( 'wes-quiz-app', 'acf/wes-quiz-app' ), true ) ) {
+		return $args;
+	}
+
+	$args['mode'] = 'edit';
+
+	return $args;
+}
+add_filter( 'acf/register_block_type_args', 'wes_quiz_block_editor_args', 20, 2 );
+
+/**
  * Register the Quiz selector used by the Interactive Quiz block.
  */
 function wes_register_quiz_block_fields() {
