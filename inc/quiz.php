@@ -127,8 +127,8 @@ function wes_quiz_cpt_data( $post_id, $lang = 'en' ) {
 /**
  * Get quiz data for a language, optionally starting from a specific Quiz post.
  *
- * When Polylang is active, the selected post is resolved to its translation in
- * the requested language before its ACF fields are read.
+ * A selected Quiz post is authoritative. Legacy JSON is used only when there
+ * is no valid Quiz post selected.
  *
  * @param string $lang    Language slug.
  * @param int    $quiz_id Selected Quiz post ID.
@@ -141,13 +141,13 @@ function wes_quiz_data( $lang = 'en', $quiz_id = 0 ) {
 	if ( $quiz_id && 'quiz' === get_post_type( $quiz_id ) ) {
 		if ( function_exists( 'pll_get_post' ) ) {
 			$translated_id = (int) pll_get_post( $quiz_id, $lang );
-			if ( $translated_id ) {
+			if ( $translated_id && 'quiz' === get_post_type( $translated_id ) ) {
 				$quiz_id = $translated_id;
 			}
 		}
 
 		$data = wes_quiz_cpt_data( $quiz_id, $lang );
-		if ( ! empty( $data['questions'] ) && ! empty( $data['profiles'] ) ) {
+		if ( is_array( $data ) ) {
 			foreach ( $data['questions'] as $qi => &$question ) {
 				$question['help'] = ! empty( $question['multi'] ) ? ( $data['ui']['multi'] ?? '' ) : ( $data['ui']['single'] ?? '' );
 				foreach ( $question['options'] as $oi => &$option ) {
@@ -158,9 +158,11 @@ function wes_quiz_data( $lang = 'en', $quiz_id = 0 ) {
 			unset( $question );
 			return $data;
 		}
+
+		return null;
 	}
 
-	// Legacy JSON fallback while the migration is being completed.
+	// Legacy JSON fallback is used only when no valid Quiz post was selected.
 	static $raw = null;
 	if ( null === $raw ) {
 		$file = get_template_directory() . '/assets/data/quiz.json';
