@@ -13,23 +13,17 @@ require_once get_template_directory() . '/inc/quiz-cpt.php';
 require_once get_template_directory() . '/inc/quiz-block.php';
 
 /**
- * Ensure the Quiz CPT is exposed to Polylang settings and enabled for translations.
+ * Ensure the Quiz CPT is exposed to Polylang and enabled for translations.
  *
- * Polylang uses the second argument as a flag for its settings list. When it is
- * true, the post type must remain in the list so the checkbox is displayed.
- * When it is false, the post type must be registered as translatable.
+ * Polylang expects the post type slug as the array value. Using a boolean
+ * here can prevent the CPT from being rendered correctly in the settings UI.
  *
  * @param array $post_types Registered post types.
  * @param bool  $is_settings Whether Polylang is building its settings list.
  * @return array
  */
 function wes_quiz_polylang_post_types_final( $post_types, $is_settings ) {
-	if ( $is_settings ) {
-		$post_types['quiz'] = true;
-	} else {
-		$post_types['quiz'] = 'quiz';
-	}
-
+	$post_types['quiz'] = 'quiz';
 	return $post_types;
 }
 add_filter( 'pll_get_post_types', 'wes_quiz_polylang_post_types_final', 99, 2 );
