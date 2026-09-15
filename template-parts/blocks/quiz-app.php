@@ -14,17 +14,24 @@ $wes_lang    = function_exists( 'pll_current_language' ) ? pll_current_language(
 $wes_quiz_id = function_exists( 'get_field' ) ? absint( get_field( 'quiz_post' ) ) : 0;
 
 /*
- * In the block editor a newly inserted block can render before the ACF
- * selector has a saved value. Never return an empty render in that state;
- * Gutenberg/ACF needs a stable server-side preview while the block is being
- * configured.
+ * Gutenberg/ACF must not depend on the server-side quiz data layer while the
+ * block is being edited. The ACF field itself is the editor UI; the actual
+ * quiz payload is only needed on the front end.
+ *
+ * This also prevents an invalid/missing Quiz translation, incomplete ACF
+ * fields, or another data-layer issue from causing the editor block to vanish
+ * immediately after selecting a Quiz post.
  */
-if ( ! $wes_quiz_id ) {
+if ( is_admin() ) {
 	?>
 	<div class="quiz-app quiz-app--editor-placeholder">
 		<div class="container">
 			<strong><?php echo esc_html__( 'Interactive Quiz', 'wes' ); ?></strong>
-			<p><?php echo esc_html__( 'Select a Quiz in the block settings to configure this block.', 'wes' ); ?></p>
+			<?php if ( $wes_quiz_id ) : ?>
+				<p><?php echo esc_html__( 'Quiz selected. The quiz will use the selected Quiz content on the front end.', 'wes' ); ?></p>
+			<?php else : ?>
+				<p><?php echo esc_html__( 'Select a Quiz in the block settings to configure this block.', 'wes' ); ?></p>
+			<?php endif; ?>
 		</div>
 	</div>
 	<?php
@@ -33,19 +40,8 @@ if ( ! $wes_quiz_id ) {
 
 $wes_quiz = function_exists( 'wes_quiz_data' ) ? wes_quiz_data( $wes_lang, $wes_quiz_id ) : null;
 
-/* A configured block must still render a stable editor placeholder if its
- * selected Quiz cannot currently provide data. Do not make Gutenberg lose
- * the block because the data layer is temporarily unavailable.
- */
+/* Never render an empty/invalid front-end quiz payload. */
 if ( ! is_array( $wes_quiz ) ) {
-	?>
-	<div class="quiz-app quiz-app--editor-placeholder">
-		<div class="container">
-			<strong><?php echo esc_html__( 'Interactive Quiz', 'wes' ); ?></strong>
-			<p><?php echo esc_html__( 'The selected Quiz could not be loaded. Please check the Quiz post and ACF fields.', 'wes' ); ?></p>
-		</div>
-	</div>
-	<?php
 	return;
 }
 ?>
