@@ -10,11 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Keep the Interactive Quiz block in ACF edit mode while configuring it.
+ * Keep the Interactive Quiz block in ACF edit mode.
  *
- * The block is registered centrally in inc/acf-blocks.php. This filter only
- * changes this block's editor mode so Gutenberg does not depend on the
- * server-rendered preview before the required Quiz field has been saved.
+ * The quiz is a dynamic PHP-rendered block and does not use InnerBlocks.
+ * Keeping it in edit mode avoids Gutenberg/ACF trying to replace the editor
+ * instance with a server-rendered preview after the page is saved.
  *
  * ACF applies the acf/register_block_type_args filter with the block
  * arguments array only, so the block name must be read from the arguments.
@@ -30,6 +30,14 @@ function wes_quiz_block_editor_args( $args ) {
 	}
 
 	$args['mode'] = 'edit';
+
+	if ( ! isset( $args['supports'] ) || ! is_array( $args['supports'] ) ) {
+		$args['supports'] = array();
+	}
+
+	/* This block has no InnerBlocks and should never switch to preview mode. */
+	$args['supports']['mode'] = false;
+	$args['supports']['jsx']  = false;
 
 	return $args;
 }
@@ -56,12 +64,12 @@ function wes_register_quiz_block_fields() {
 					'post_type'     => array( 'quiz' ),
 					'field_type'    => 'select',
 					'multiple'      => 0,
-					'ui'            => 1,
-					'ajax'          => 1,
+					'ui'             => 1,
+					'ajax'           => 1,
 					'return_format' => 'id',
 					'allow_null'    => 0,
 					'required'      => 1,
-					'instructions'  => 'Select the Quiz post to display. Its Polylang translation will be loaded automatically for the current page language.',
+					'instructions'   => 'Select the Quiz post to display. Its Polylang translation will be loaded automatically for the current page language.',
 				),
 			),
 			'location' => array(
