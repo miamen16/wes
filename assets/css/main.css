@@ -418,6 +418,11 @@ button { font: inherit; cursor: pointer; }
 }
 
 /* Responsive: 1 or 2 cards on mobile screen sizes */
+	.wes-video__editor-thumbnail {
+		flex-basis: 100%;
+		width: 100%;
+	}
+
 @media (max-width: 768px) {
     .action-card {
         flex: 0 0 calc((100% - 20px) / 2); /* 2 cards on tablet */
@@ -1817,6 +1822,47 @@ input#mailster-id-736c61 {
 .wes-video--editor {
 	padding: 20px;
 	background: var(--c-gray-100);
+}
+
+.wes-video__editor-thumbnail {
+	position: relative;
+	flex: 0 0 320px;
+	width: 320px;
+	aspect-ratio: 16 / 9;
+	overflow: hidden;
+	background: #000;
+}
+
+.wes-video__editor-thumbnail img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.wes-video__editor-play {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 56px;
+	height: 56px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.75);
+	color: var(--c-white);
+}
+
+.wes-video__editor-play .dashicons {
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
+}
+
+.wes-video__editor-thumbnail:hover .wes-video__editor-play {
+	background: rgba(0, 0, 0, 0.9);
 }
 
 .wes-video__editor-preview {
