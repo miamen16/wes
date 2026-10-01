@@ -22,7 +22,7 @@ if ( $url ) {
 	$parts = wp_parse_url( $url );
 
 	if ( ! empty( $parts['host'] ) ) {
-		$host = strtolower( preg_replace( '/^www\./', '', $parts['host'] ) );
+		$host = strtolower( preg_replace( '/^www\\./', '', $parts['host'] ) );
 
 		if ( 'youtu.be' === $host && ! empty( $parts['path'] ) ) {
 			$video_id = trim( $parts['path'], '/' );
@@ -47,6 +47,29 @@ if ( ! $video_id ) {
 	}
 	return;
 }
+
+/*
+ * Gutenberg/ACF renders block previews inside wp-admin. Loading a YouTube iframe
+ * directly inside the editor can result in YouTube's "Video player configuration
+ * error" even though the same embed works on the frontend. Keep the editor
+ * preview lightweight and render the actual player on the frontend.
+ */
+if ( is_admin() ) :
+?>
+<section class="wes-video wes-video--editor">
+	<div class="wes-video__editor-preview">
+		<div class="wes-video__editor-icon" aria-hidden="true">
+			<span class="dashicons dashicons-video-alt3"></span>
+		</div>
+		<div class="wes-video__editor-content">
+			<strong><?php esc_html_e( 'YouTube Video', 'wes' ); ?></strong>
+			<span><?php echo esc_html( $url ); ?></span>
+		</div>
+	</div>
+</section>
+<?php
+	return;
+endif;
 
 $params = array(
 	'controls'       => $controls ? '1' : '0',
