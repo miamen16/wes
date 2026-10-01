@@ -55,12 +55,26 @@ if ( ! $video_id ) {
  * preview lightweight and render the actual player on the frontend.
  */
 if ( is_admin() ) :
+	$thumbnail_url = 'https://i.ytimg.com/vi/' . rawurlencode( $video_id ) . '/hqdefault.jpg';
 ?>
 <section class="wes-video wes-video--editor">
 	<div class="wes-video__editor-preview">
-		<div class="wes-video__editor-icon" aria-hidden="true">
-			<span class="dashicons dashicons-video-alt3"></span>
-		</div>
+		<a
+			class="wes-video__editor-thumbnail"
+			href="<?php echo esc_url( $url ); ?>"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="<?php esc_attr_e( 'Open YouTube video', 'wes' ); ?>"
+		>
+			<img
+				src="<?php echo esc_url( $thumbnail_url ); ?>"
+				alt="<?php esc_attr_e( 'YouTube video thumbnail', 'wes' ); ?>"
+				loading="lazy"
+			/>
+			<span class="wes-video__editor-play" aria-hidden="true">
+				<span class="dashicons dashicons-controls-play"></span>
+			</span>
+		</a>
 		<div class="wes-video__editor-content">
 			<strong><?php esc_html_e( 'YouTube Video', 'wes' ); ?></strong>
 			<span><?php echo esc_html( $url ); ?></span>
