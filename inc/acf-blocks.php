@@ -66,6 +66,7 @@ add_action( 'acf/init', function () {
 		array( 'begin-cards-new', 'Begin Cards New', 'Illustrated category cards (circle image + org + overview).', 'images-alt2' ),
 		array( 'card1', 'Card 1', 'Single illustrated category card (circle image + org + overview).', 'images-alt2' ),
 		array( 'resource-library', 'Resource Library', 'Filter tabs + compact resource rows.', 'list-view' ),
+		array( 'video', 'Video', 'Full-width YouTube video player.', 'video-alt3' ),
 	);
 	foreach ( $blocks as $b ) {
 		acf_register_block_type( array(
@@ -1019,6 +1020,58 @@ add_action( 'acf/init', function () {
 				),
 			),
 			'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-resource-library' ) ) ),
+		) );
+
+		acf_add_local_field_group( array(
+			'key'      => 'group_block_video',
+			'title'    => 'Video',
+			'fields'   => array(
+				array(
+					'key'           => 'field_video_url',
+					'label'         => 'YouTube URL',
+					'name'          => 'video_url',
+					'type'          => 'url',
+					'required'      => 1,
+					'placeholder'   => 'https://www.youtube.com/watch?v=...',
+					'instructions'  => 'Paste a YouTube video URL.',
+				),
+				array(
+					'key'           => 'field_video_controls',
+					'label'         => 'Controls',
+					'name'          => 'controls',
+					'type'          => 'true_false',
+					'ui'            => 1,
+					'default_value' => 1,
+					'instructions'  => 'Show YouTube player controls.',
+				),
+				array(
+					'key'           => 'field_video_autoplay',
+					'label'         => 'Autoplay',
+					'name'          => 'autoplay',
+					'type'          => 'true_false',
+					'ui'            => 1,
+					'default_value' => 0,
+					'instructions'  => 'Autoplay is subject to browser restrictions.',
+				),
+				array(
+					'key'           => 'field_video_mute',
+					'label'         => 'Mute',
+					'name'          => 'mute',
+					'type'          => 'true_false',
+					'ui'            => 1,
+					'default_value' => 0,
+				),
+				array(
+					'key'           => 'field_video_loop',
+					'label'         => 'Loop',
+					'name'          => 'loop',
+					'type'          => 'true_false',
+					'ui'            => 1,
+					'default_value' => 0,
+					'instructions'  => 'Loop the video when playback reaches the end.',
+				),
+			),
+			'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/wes-video' ) ) ),
 		) );
 
 		acf_add_local_field_group( array(
